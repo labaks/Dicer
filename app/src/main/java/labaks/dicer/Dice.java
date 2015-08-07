@@ -6,7 +6,7 @@ public class Dice {
     boolean isLeft;
     ImageButton diceButton;
 
-    boolean switchDiceLefted() {
+    boolean switchIsDiceLeft() {
         return isLeft = !isLeft;
     }
 }

@@ -105,10 +105,10 @@ public class MainActivity extends ActionBarActivity {
             if (dicesImage[i].diceButton.getId() == view.getId()) {
                 if (!dicesImage[i].isLeft) {
                     dicesImage[i].diceButton.setBackgroundColor(Color.BLACK);
-                    dicesImage[i].switchDiceLefted();
+                    dicesImage[i].switchIsDiceLeft();
                 } else {
                     dicesImage[i].diceButton.setBackgroundColor(Color.WHITE);
-                    dicesImage[i].switchDiceLefted();
+                    dicesImage[i].switchIsDiceLeft();
                 }
             }
         }
