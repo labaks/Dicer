@@ -11,4 +11,6 @@ public class Rules {
     int fourValue = 0;
     int threeValue = 0;
     int pairValue = 0;
+    int[] twoPairValue = {0, 0};
+    int[] fullHouseValue = {0, 0};
 }

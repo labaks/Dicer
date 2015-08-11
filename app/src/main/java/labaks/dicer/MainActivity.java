@@ -125,11 +125,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void checkRepeat(int diceValue) {
-        for (int i = 0; i < diceSides; i++) {
-            if (i == diceValue - 1) {
-                results[i] += 1;
-            }
-        }
+        results[diceValue - 1]++;
     }
 
     public void resetResults() {
@@ -159,8 +155,9 @@ public class MainActivity extends ActionBarActivity {
                 if (player.hasPair) {
                     player.hasFoolHouse = true;
                     player.hasPair = false;
+                    player.fullHouseValue[0] = player.pairValue;
+                    player.fullHouseValue[1] = i + 1;
                     player.pairValue = 0;
-                    player.threeValue = 0;
                 } else {
                     player.hasThree = true;
                     player.threeValue = i + 1;
@@ -169,6 +166,8 @@ public class MainActivity extends ActionBarActivity {
                 if (player.hasPair) {
                     player.hasTwoPair = true;
                     player.hasPair = false;
+                    player.twoPairValue[0] = player.pairValue;
+                    player.twoPairValue[1] = i + 1;
                     player.pairValue = 0;
                 } else {
                     player.hasPair = true;
@@ -189,13 +188,13 @@ public class MainActivity extends ActionBarActivity {
             builder.append(getString(R.string.you_have_four_of_a_kind)).append(space).append(getString(R.string.of)).append(space).append(player.fourValue);
             combination.setText(builder.toString());
         } else if (player.hasFoolHouse) {
-            builder.append(getString(R.string.you_have_full_house));
+            builder.append(getString(R.string.you_have_full_house)).append(space).append(getString(R.string.of)).append(space).append(player.fullHouseValue[0]).append(space).append(getString(R.string.and)).append(space).append(player.fullHouseValue[1]);
             combination.setText(builder.toString());
         } else if (player.hasThree) {
             builder.append(getString(R.string.you_have_three_of_a_kind)).append(space).append(getString(R.string.of)).append(space).append(player.threeValue);
             combination.setText(builder.toString());
         } else if (player.hasTwoPair) {
-            builder.append(getString(R.string.you_have_two_pair));
+            builder.append(getString(R.string.you_have_two_pair)).append(space).append(getString(R.string.of)).append(space).append(player.twoPairValue[0]).append(space).append(getString(R.string.and)).append(space).append(player.twoPairValue[1]);
             combination.setText(builder.toString());
         } else if (player.hasPair) {
             builder.append(getString(R.string.you_have_one_pair)).append(space).append(getString(R.string.of)).append(space).append(player.pairValue);

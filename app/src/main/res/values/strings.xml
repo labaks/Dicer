@@ -17,4 +17,5 @@
     <string name="you_have_one_pair">You have one pair</string>
     <string name="you_have_full_house">You have full house</string>
     <string name="you_have_two_pair">You have two pair</string>
+    <string name="and">and</string>
 </resources>
