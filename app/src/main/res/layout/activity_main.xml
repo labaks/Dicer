@@ -129,5 +129,14 @@
         android:layout_below="@+id/info"
         android:text="" />
 
+    <TextView
+        android:id="@+id/combination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/massInfo"
+        android:layout_alignStart="@+id/massInfo"
+        android:layout_below="@+id/massInfo"
+        android:text="" />
+
 
 </RelativeLayout>

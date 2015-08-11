@@ -9,4 +9,12 @@
     <string name="dice_4">Dice 4</string>
     <string name="dice_5">Dice 5</string>
     <string name="info">Info:</string>
+    <string name="you_have">You have</string>
+    <string name="you_have_poker">You have poker</string>
+    <string name="of">of</string>
+    <string name="you_have_four_of_a_kind">You have four of a kind</string>
+    <string name="you_have_three_of_a_kind">You have three of a kind</string>
+    <string name="you_have_one_pair">You have one pair</string>
+    <string name="you_have_full_house">You have full house</string>
+    <string name="you_have_two_pair">You have two pair</string>
 </resources>

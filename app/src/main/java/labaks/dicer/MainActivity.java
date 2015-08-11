@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
     private final int numberOfDices = 5;
     private final int diceSides = 6;
     private TextView[] diceInfo = new TextView[numberOfDices];
-    private TextView massInfo;
+    private TextView massInfo, combination;
     private Dice[] dicesImage = new Dice[numberOfDices];
     private Bitmap[] croppedDiceImage = new Bitmap[diceSides];
     private final static DisplayMetrics metrics = new DisplayMetrics();
@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
         cropDiceSides();
         initDicesImage(croppedDiceImage, diceWidth);
         massInfo = (TextView) findViewById(R.id.massInfo);
+        combination = (TextView) findViewById(R.id.combination);
 
         final Button dropTheDices = (Button) findViewById(R.id.dropDice);
         dropTheDices.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +55,8 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
                 outMass(results, diceSides);
+                Rules firstPlayer = new Rules();
+                outputResult(hasCombinations(firstPlayer));
                 resetResults();
             }
         });
@@ -142,6 +145,63 @@ public class MainActivity extends ActionBarActivity {
             builder.append(i + 1).append(": ").append(Integer.toString(mass[i])).append(separator);
         }
         massInfo.setText(builder.toString());
+    }
+
+    public Rules hasCombinations(Rules player) {
+        for (int i = 0; i < diceSides; i++) {
+            if (results[i] == 5) {
+                player.hasPoker = true;
+                player.pokerValue = i + 1;
+            } else if (results[i] == 4) {
+                player.hasFour = true;
+                player.fourValue = i + 1;
+            } else if (results[i] == 3) {
+                if (player.hasPair) {
+                    player.hasFoolHouse = true;
+                    player.hasPair = false;
+                    player.pairValue = 0;
+                    player.threeValue = 0;
+                } else {
+                    player.hasThree = true;
+                    player.threeValue = i + 1;
+                }
+            } else if (results[i] == 2) {
+                if (player.hasPair) {
+                    player.hasTwoPair = true;
+                    player.hasPair = false;
+                    player.pairValue = 0;
+                } else {
+                    player.hasPair = true;
+                    player.pairValue = i + 1;
+                }
+            }
+        }
+        return player;
+    }
+
+    public void outputResult(Rules player) {
+        StringBuilder builder = new StringBuilder();
+        String space = " ";
+        if (player.hasPoker) {
+            builder.append(getString(R.string.you_have_poker)).append(space).append(getString(R.string.of)).append(space).append(player.pokerValue);
+            combination.setText(builder.toString());
+        } else if (player.hasFour) {
+            builder.append(getString(R.string.you_have_four_of_a_kind)).append(space).append(getString(R.string.of)).append(space).append(player.fourValue);
+            combination.setText(builder.toString());
+        } else if (player.hasFoolHouse) {
+            builder.append(getString(R.string.you_have_full_house));
+            combination.setText(builder.toString());
+        } else if (player.hasThree) {
+            builder.append(getString(R.string.you_have_three_of_a_kind)).append(space).append(getString(R.string.of)).append(space).append(player.threeValue);
+            combination.setText(builder.toString());
+        } else if (player.hasTwoPair) {
+            builder.append(getString(R.string.you_have_two_pair));
+            combination.setText(builder.toString());
+        } else if (player.hasPair) {
+            builder.append(getString(R.string.you_have_one_pair)).append(space).append(getString(R.string.of)).append(space).append(player.pairValue);
+            combination.setText(builder.toString());
+        }
+
     }
 
 }
