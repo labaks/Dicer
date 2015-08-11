@@ -13,14 +13,17 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+
 public class MainActivity extends ActionBarActivity {
 
     private final int numberOfDices = 5;
     private final int diceSides = 6;
     private TextView[] diceInfo = new TextView[numberOfDices];
+    private TextView massInfo;
     private Dice[] dicesImage = new Dice[numberOfDices];
     private Bitmap[] croppedDiceImage = new Bitmap[diceSides];
     private final static DisplayMetrics metrics = new DisplayMetrics();
+    private int[] results = new int[diceSides];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +31,13 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        initDicesInfo();
 
+        initDicesInfo();
 
         final int diceWidth = (metrics.widthPixels - 100) / numberOfDices;
         cropDiceSides();
         initDicesImage(croppedDiceImage, diceWidth);
+        massInfo = (TextView) findViewById(R.id.massInfo);
 
         final Button dropTheDices = (Button) findViewById(R.id.dropDice);
         dropTheDices.setOnClickListener(new View.OnClickListener() {
@@ -46,8 +50,11 @@ public class MainActivity extends ActionBarActivity {
                                 getString(getBaseContext().getResources().getIdentifier("dice_" + (i + 1), "string", getBaseContext().getPackageName())) +
                                         ": " + Integer.toString(currentResult));
                         dicesImage[i].diceButton.setImageBitmap(croppedDiceImage[currentResult - 1]);
+                        checkRepeat(currentResult);
                     }
                 }
+                outMass(results, diceSides);
+                resetResults();
             }
         });
     }
@@ -113,4 +120,28 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
+
+    public void checkRepeat(int diceValue) {
+        for (int i = 0; i < diceSides; i++) {
+            if (i == diceValue - 1) {
+                results[i] += 1;
+            }
+        }
+    }
+
+    public void resetResults() {
+        for (int i = 0; i < diceSides; i++) {
+            results[i] = 0;
+        }
+    }
+
+    public void outMass(int mass[], int length) {
+        StringBuilder builder = new StringBuilder();
+        String separator = " | ";
+        for (int i = 0; i < length; i++) {
+            builder.append(i + 1).append(": ").append(Integer.toString(mass[i])).append(separator);
+        }
+        massInfo.setText(builder.toString());
+    }
+
 }

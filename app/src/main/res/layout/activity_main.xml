@@ -16,6 +16,7 @@
 
 
     <TableLayout
+        android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dropDice"
@@ -63,9 +64,9 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
+                android:onClick="onDiceLeft"
                 android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:onClick="onDiceLeft"/>
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:id="@+id/diceImage2"
@@ -73,9 +74,9 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
+                android:onClick="onDiceLeft"
                 android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:onClick="onDiceLeft"/>
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:id="@+id/diceImage3"
@@ -83,9 +84,9 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
+                android:onClick="onDiceLeft"
                 android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:onClick="onDiceLeft"/>
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:id="@+id/diceImage4"
@@ -93,9 +94,9 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
+                android:onClick="onDiceLeft"
                 android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:onClick="onDiceLeft"/>
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:id="@+id/diceImage5"
@@ -103,12 +104,30 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
+                android:onClick="onDiceLeft"
                 android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:onClick="onDiceLeft"/>
+                android:scaleType="fitCenter" />
         </TableRow>
 
     </TableLayout>
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tableLayout"
+        android:layout_alignStart="@+id/tableLayout"
+        android:layout_below="@+id/tableLayout"
+        android:text="@string/info" />
+
+    <TextView
+        android:id="@+id/massInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/info"
+        android:layout_alignStart="@+id/info"
+        android:layout_below="@+id/info"
+        android:text="" />
 
 
 </RelativeLayout>
