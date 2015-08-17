@@ -1,0 +1,23 @@
+<resources>
+
+    <string name="action_settings">Настройки</string>
+    <string name="drop_the_dice">Кинуть кубики</string>
+    <string name="dice_1">Кубик 1</string>
+    <string name="dice_2">Кубик 2</string>
+    <string name="dice_3">Кубик 3</string>
+    <string name="dice_4">Кубик 4</string>
+    <string name="dice_5">Кубик 5</string>
+    <string name="info">Инфо:</string>
+    <string name="you_have">Выпало</string>
+    <string name="you_have_poker">Выпал покер</string>
+    <string name="of">номиналом</string>
+    <string name="you_have_four_of_a_kind">Выпало карэ</string>
+    <string name="you_have_three_of_a_kind">Выпал стрит</string>
+    <string name="you_have_one_pair">Выпала пара</string>
+    <string name="you_have_full_house">Выпал фул-хаус</string>
+    <string name="you_have_two_pair">Выпало две пары</string>
+    <string name="and">и</string>
+    <string name="you_have_little_strait">Выпал малый стрит (от 1 до 5)</string>
+    <string name="you_have_big_strait">Выпал большой стрит (от 2 до 6)</string>
+    <string name="you_have_no_combinations">Не выпало ничего</string>
+</resources>
