@@ -46,13 +46,13 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View view) {
                 for (int i = 0; i < numberOfDices; i++) {
                     if (!dicesImage[i].isLeft) {
-                        int currentResult = dropTheDice();
+                        dicesImage[i].value = dropTheDice();
                         diceInfo[i].setText(
                                 getString(getBaseContext().getResources().getIdentifier("dice_" + (i + 1), "string", getBaseContext().getPackageName())) +
-                                        ": " + Integer.toString(currentResult));
-                        dicesImage[i].diceButton.setImageBitmap(croppedDiceImage[currentResult - 1]);
-                        checkRepeat(currentResult);
+                                        ": " + Integer.toString(dicesImage[i].value));
+                        dicesImage[i].diceButton.setImageBitmap(croppedDiceImage[dicesImage[i].value - 1]);
                     }
+                    checkRepeat(dicesImage[i].value);
                 }
                 outMass(results, diceSides);
                 Rules firstPlayer = new Rules();
@@ -143,35 +143,60 @@ public class MainActivity extends ActionBarActivity {
         massInfo.setText(builder.toString());
     }
 
+    public static int maxInMass(int mass[]) {
+        int max = 0;
+        for (int mas : mass) {
+            max = Math.max(max, mas);
+        }
+        return max;
+    }
+
     public Rules hasCombinations(Rules player) {
-        for (int i = 0; i < diceSides; i++) {
-            if (results[i] == 5) {
-                player.hasPoker = true;
-                player.pokerValue = i + 1;
-            } else if (results[i] == 4) {
-                player.hasFour = true;
-                player.fourValue = i + 1;
-            } else if (results[i] == 3) {
-                if (player.hasPair) {
-                    player.hasFoolHouse = true;
-                    player.hasPair = false;
-                    player.fullHouseValue[0] = player.pairValue;
-                    player.fullHouseValue[1] = i + 1;
-                    player.pairValue = 0;
-                } else {
-                    player.hasThree = true;
-                    player.threeValue = i + 1;
-                }
-            } else if (results[i] == 2) {
-                if (player.hasPair) {
-                    player.hasTwoPair = true;
-                    player.hasPair = false;
-                    player.twoPairValue[0] = player.pairValue;
-                    player.twoPairValue[1] = i + 1;
-                    player.pairValue = 0;
-                } else {
-                    player.hasPair = true;
-                    player.pairValue = i + 1;
+        boolean isMaxOne = maxInMass(results) == 1;
+        if (isMaxOne) {
+            if (results[0] == 0) {
+                player.hasBigStrait = true;
+            } else if (results[5] == 0) {
+                player.hasLittleStrait = true;
+            } else {
+                player.hasNoComb = true;
+            }
+        } else {
+            for (int i = 0; i < diceSides; i++) {
+                if (results[i] == 5) {
+                    player.hasPoker = true;
+                    player.pokerValue = i + 1;
+                } else if (results[i] == 4) {
+                    player.hasFour = true;
+                    player.fourValue = i + 1;
+                } else if (results[i] == 3) {
+                    if (player.hasPair) {
+                        player.hasFoolHouse = true;
+                        player.hasThree = false;
+                        player.fullHouseValue[0] = player.pairValue;
+                        player.fullHouseValue[1] = i+1;
+                        player.pairValue = 0;
+                    } else {
+                        player.hasThree = true;
+                        player.threeValue = i + 1;
+                    }
+                } else if (results[i] == 2) {
+                    if (player.hasPair) {
+                        player.hasTwoPair = true;
+                        player.hasPair = false;
+                        player.twoPairValue[0] = player.pairValue;
+                        player.twoPairValue[1] = i + 1;
+                        player.pairValue = 0;
+                    } else if (player.hasThree) {
+                        player.hasFoolHouse = true;
+                        player.hasThree = false;
+                        player.fullHouseValue[0] = i + 1;
+                        player.fullHouseValue[1] = player.threeValue;
+                        player.threeValue = 0;
+                    } else {
+                        player.hasPair = true;
+                        player.pairValue = i + 1;
+                    }
                 }
             }
         }
@@ -198,6 +223,15 @@ public class MainActivity extends ActionBarActivity {
             combination.setText(builder.toString());
         } else if (player.hasPair) {
             builder.append(getString(R.string.you_have_one_pair)).append(space).append(getString(R.string.of)).append(space).append(player.pairValue);
+            combination.setText(builder.toString());
+        } else if (player.hasLittleStrait) {
+            builder.append(getString(R.string.you_have_little_strait));
+            combination.setText(builder.toString());
+        } else if (player.hasBigStrait) {
+            builder.append(getString(R.string.you_have_big_strait));
+            combination.setText(builder.toString());
+        } else if (player.hasNoComb) {
+            builder.append(getString(R.string.you_have_no_combinations));
             combination.setText(builder.toString());
         }
 

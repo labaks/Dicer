@@ -18,4 +18,7 @@
     <string name="you_have_full_house">You have full house</string>
     <string name="you_have_two_pair">You have two pair</string>
     <string name="and">and</string>
+    <string name="you_have_little_strait">You have little strait (from 1 to 5)</string>
+    <string name="you_have_big_strait">You have big strait (from 2 to 6)</string>
+    <string name="you_have_no_combinations">You have no combinations</string>
 </resources>

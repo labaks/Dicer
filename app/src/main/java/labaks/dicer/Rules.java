@@ -7,6 +7,9 @@ public class Rules {
     boolean hasFoolHouse = false;
     boolean hasFour = false;
     boolean hasPoker = false;
+    boolean hasLittleStrait = false;
+    boolean hasBigStrait = false;
+    boolean hasNoComb = false;
     int pokerValue = 0;
     int fourValue = 0;
     int threeValue = 0;
