@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
 
         initDicesInfo();
 
-        final int diceWidth = (metrics.widthPixels - 100) / numberOfDices;
+        final int diceWidth = (metrics.widthPixels - 20) / numberOfDices;
         cropDiceSides();
         initDicesImage(croppedDiceImage, diceWidth);
         massInfo = (TextView) findViewById(R.id.massInfo);
