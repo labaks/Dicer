@@ -20,8 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dropDice"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp">
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
 
         <TableRow>
 
@@ -136,6 +136,15 @@
         android:layout_alignLeft="@+id/massInfo"
         android:layout_alignStart="@+id/massInfo"
         android:layout_below="@+id/massInfo"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/doubleResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/combination"
+        android:layout_alignStart="@+id/combination"
+        android:layout_below="@+id/combination"
         android:text="" />
 
 

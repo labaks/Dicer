@@ -16,4 +16,5 @@ public class Rules {
     int pairValue = 0;
     int[] twoPairValue = {0, 0};
     int[] fullHouseValue = {0, 0};
+    double doubleResult = 0;
 }

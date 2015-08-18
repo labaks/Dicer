@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
     private final int numberOfDices = 5;
     private final int diceSides = 6;
     private TextView[] diceInfo = new TextView[numberOfDices];
-    private TextView massInfo, combination;
+    private TextView massInfo, combination, doubleResultOutput;
     private Dice[] dicesImage = new Dice[numberOfDices];
     private Bitmap[] croppedDiceImage = new Bitmap[diceSides];
     private final static DisplayMetrics metrics = new DisplayMetrics();
@@ -39,6 +39,7 @@ public class MainActivity extends ActionBarActivity {
         initDicesImage(croppedDiceImage, diceWidth);
         massInfo = (TextView) findViewById(R.id.massInfo);
         combination = (TextView) findViewById(R.id.combination);
+        doubleResultOutput = (TextView) findViewById(R.id.doubleResult);
 
         final Button dropTheDices = (Button) findViewById(R.id.dropDice);
         dropTheDices.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +58,8 @@ public class MainActivity extends ActionBarActivity {
                 outMass(results, diceSides);
                 Rules firstPlayer = new Rules();
                 outputResult(hasCombinations(firstPlayer));
+                resultToNumber(firstPlayer);
+                doubleResultOutput.setText(Double.toString(firstPlayer.doubleResult));
                 resetResults();
             }
         });
@@ -172,9 +175,9 @@ public class MainActivity extends ActionBarActivity {
                 } else if (results[i] == 3) {
                     if (player.hasPair) {
                         player.hasFoolHouse = true;
-                        player.hasThree = false;
-                        player.fullHouseValue[0] = player.pairValue;
-                        player.fullHouseValue[1] = i+1;
+                        player.hasPair = false;
+                        player.fullHouseValue[0] = i + 1;
+                        player.fullHouseValue[1] = player.pairValue;
                         player.pairValue = 0;
                     } else {
                         player.hasThree = true;
@@ -190,8 +193,8 @@ public class MainActivity extends ActionBarActivity {
                     } else if (player.hasThree) {
                         player.hasFoolHouse = true;
                         player.hasThree = false;
-                        player.fullHouseValue[0] = i + 1;
-                        player.fullHouseValue[1] = player.threeValue;
+                        player.fullHouseValue[0] = player.threeValue;
+                        player.fullHouseValue[1] = i + 1;
                         player.threeValue = 0;
                     } else {
                         player.hasPair = true;
@@ -234,7 +237,26 @@ public class MainActivity extends ActionBarActivity {
             builder.append(getString(R.string.you_have_no_combinations));
             combination.setText(builder.toString());
         }
+    }
 
+    public void resultToNumber(Rules player) {
+        if (player.hasPair) {
+            player.doubleResult = 2 + player.pairValue * 0.1;
+        } else if (player.hasTwoPair) {
+            player.doubleResult = 3 + (player.twoPairValue[0] + player.twoPairValue[1]) * 0.1;
+        } else if (player.hasThree) {
+            player.doubleResult = 4 + player.threeValue * 0.1;
+        } else if (player.hasLittleStrait) {
+            player.doubleResult = 5.0;
+        } else if (player.hasBigStrait) {
+            player.doubleResult = 5.5;
+        } else if (player.hasFoolHouse) {
+            player.doubleResult = 6 + player.fullHouseValue[0] * 0.1 + player.fullHouseValue[1] * 0.01;
+        } else if (player.hasFour) {
+            player.doubleResult = 7 + player.fourValue * 0.1;
+        } else if (player.hasPoker) {
+            player.doubleResult = 8 + player.pokerValue * 0.1;
+        }
     }
 
 }
