@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
     private final int numberOfDices = 5;
     private final int diceSides = 6;
     private TextView[] diceInfo = new TextView[numberOfDices];
-    private TextView massInfo, combination, doubleResultOutput;
+    private TextView massInfo, combinationInfo, doubleResultOutput;
     private Dice[] dicesImage = new Dice[numberOfDices];
     private Bitmap[] croppedDiceImage = new Bitmap[diceSides];
     private final static DisplayMetrics metrics = new DisplayMetrics();
@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
         cropDiceSides();
         initDicesImage(croppedDiceImage, diceWidth);
         massInfo = (TextView) findViewById(R.id.massInfo);
-        combination = (TextView) findViewById(R.id.combination);
+        combinationInfo = (TextView) findViewById(R.id.combination);
         doubleResultOutput = (TextView) findViewById(R.id.doubleResult);
 
         final Button dropTheDices = (Button) findViewById(R.id.dropDice);
@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
                 Rules firstPlayer = new Rules();
                 outputResult(hasCombinations(firstPlayer));
                 resultToNumber(firstPlayer);
-                doubleResultOutput.setText(Double.toString(firstPlayer.doubleResult));
+                doubleResultOutput.setText(getString(R.string.numericalResult) + Double.toString(firstPlayer.doubleResult));
                 resetResults();
             }
         });
@@ -174,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
                     player.fourValue = i + 1;
                 } else if (results[i] == 3) {
                     if (player.hasPair) {
-                        player.hasFoolHouse = true;
+                        player.hasFullHouse = true;
                         player.hasPair = false;
                         player.fullHouseValue[0] = i + 1;
                         player.fullHouseValue[1] = player.pairValue;
@@ -191,7 +191,7 @@ public class MainActivity extends ActionBarActivity {
                         player.twoPairValue[1] = i + 1;
                         player.pairValue = 0;
                     } else if (player.hasThree) {
-                        player.hasFoolHouse = true;
+                        player.hasFullHouse = true;
                         player.hasThree = false;
                         player.fullHouseValue[0] = player.threeValue;
                         player.fullHouseValue[1] = i + 1;
@@ -211,31 +211,31 @@ public class MainActivity extends ActionBarActivity {
         String space = " ";
         if (player.hasPoker) {
             builder.append(getString(R.string.you_have_poker)).append(space).append(getString(R.string.of)).append(space).append(player.pokerValue);
-            combination.setText(builder.toString());
+            combinationInfo.setText(builder.toString());
         } else if (player.hasFour) {
             builder.append(getString(R.string.you_have_four_of_a_kind)).append(space).append(getString(R.string.of)).append(space).append(player.fourValue);
-            combination.setText(builder.toString());
-        } else if (player.hasFoolHouse) {
+            combinationInfo.setText(builder.toString());
+        } else if (player.hasFullHouse) {
             builder.append(getString(R.string.you_have_full_house)).append(space).append(getString(R.string.of)).append(space).append(player.fullHouseValue[0]).append(space).append(getString(R.string.and)).append(space).append(player.fullHouseValue[1]);
-            combination.setText(builder.toString());
-        } else if (player.hasThree) {
-            builder.append(getString(R.string.you_have_three_of_a_kind)).append(space).append(getString(R.string.of)).append(space).append(player.threeValue);
-            combination.setText(builder.toString());
-        } else if (player.hasTwoPair) {
-            builder.append(getString(R.string.you_have_two_pair)).append(space).append(getString(R.string.of)).append(space).append(player.twoPairValue[0]).append(space).append(getString(R.string.and)).append(space).append(player.twoPairValue[1]);
-            combination.setText(builder.toString());
-        } else if (player.hasPair) {
-            builder.append(getString(R.string.you_have_one_pair)).append(space).append(getString(R.string.of)).append(space).append(player.pairValue);
-            combination.setText(builder.toString());
-        } else if (player.hasLittleStrait) {
-            builder.append(getString(R.string.you_have_little_strait));
-            combination.setText(builder.toString());
+            combinationInfo.setText(builder.toString());
         } else if (player.hasBigStrait) {
             builder.append(getString(R.string.you_have_big_strait));
-            combination.setText(builder.toString());
+            combinationInfo.setText(builder.toString());
+        } else if (player.hasLittleStrait) {
+            builder.append(getString(R.string.you_have_little_strait));
+            combinationInfo.setText(builder.toString());
+        } else if (player.hasThree) {
+            builder.append(getString(R.string.you_have_three_of_a_kind)).append(space).append(getString(R.string.of)).append(space).append(player.threeValue);
+            combinationInfo.setText(builder.toString());
+        } else if (player.hasTwoPair) {
+            builder.append(getString(R.string.you_have_two_pair)).append(space).append(getString(R.string.of)).append(space).append(player.twoPairValue[0]).append(space).append(getString(R.string.and)).append(space).append(player.twoPairValue[1]);
+            combinationInfo.setText(builder.toString());
+        } else if (player.hasPair) {
+            builder.append(getString(R.string.you_have_one_pair)).append(space).append(getString(R.string.of)).append(space).append(player.pairValue);
+            combinationInfo.setText(builder.toString());
         } else if (player.hasNoComb) {
             builder.append(getString(R.string.you_have_no_combinations));
-            combination.setText(builder.toString());
+            combinationInfo.setText(builder.toString());
         }
     }
 
@@ -250,7 +250,7 @@ public class MainActivity extends ActionBarActivity {
             player.doubleResult = 5.0;
         } else if (player.hasBigStrait) {
             player.doubleResult = 5.5;
-        } else if (player.hasFoolHouse) {
+        } else if (player.hasFullHouse) {
             player.doubleResult = 6 + player.fullHouseValue[0] * 0.1 + player.fullHouseValue[1] * 0.01;
         } else if (player.hasFour) {
             player.doubleResult = 7 + player.fourValue * 0.1;

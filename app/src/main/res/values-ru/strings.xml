@@ -12,7 +12,7 @@
     <string name="you_have_poker">Выпал покер</string>
     <string name="of">номиналом</string>
     <string name="you_have_four_of_a_kind">Выпало карэ</string>
-    <string name="you_have_three_of_a_kind">Выпал стрит</string>
+    <string name="you_have_three_of_a_kind">Выпал сэт</string>
     <string name="you_have_one_pair">Выпала пара</string>
     <string name="you_have_full_house">Выпал фул-хаус</string>
     <string name="you_have_two_pair">Выпало две пары</string>
@@ -20,4 +20,5 @@
     <string name="you_have_little_strait">Выпал малый стрит (от 1 до 5)</string>
     <string name="you_have_big_strait">Выпал большой стрит (от 2 до 6)</string>
     <string name="you_have_no_combinations">Не выпало ничего</string>
+    <string name="numericalResult">Числовой результат: </string>
 </resources>
