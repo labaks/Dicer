@@ -46,8 +46,6 @@ public class Player {
                 continue;
             }
             dices[i].value = generateDiceValue();
-            increaseValueCounter(dices[i].value);
-
         }
     }
 
@@ -96,6 +94,7 @@ public class Player {
                     pokerValue = i + 1;
                 } else if (droppedValuesCount[i] == 4) {
                     hasFour = true;
+                    hasPair = false;
                     fourValue = i + 1;
                 } else if (droppedValuesCount[i] == 3) {
                     if (hasPair) {
@@ -130,14 +129,18 @@ public class Player {
         }
     }
 
-    private void increaseValueCounter(int diceValue) {
-        droppedValuesCount[diceValue - 1]++;
+    public void increaseValueCounter() {
+        for (int i = 0; i < numberOfDices; i++) {
+            droppedValuesCount[this.dices[i].value - 1]++;
+        }
+
     }
 
-    public void resetValuesCounter() {
+    public void resetValues() {
         for (int i = 0; i < diceSides; i++) {
             droppedValuesCount[i] = 0;
         }
+        hasNoComb = hasPair = hasTwoPair = hasThree = hasLittleStrait = hasBigStrait = hasFullHouse = hasFour = hasPoker = false;
     }
 
 }

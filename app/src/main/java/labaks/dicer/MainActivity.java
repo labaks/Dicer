@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
     private static final int NUMBER_OF_DICES = 5;
     private final int DICE_SIDES = 6;
     private TextView[] diceInfo = new TextView[NUMBER_OF_DICES];
-    private TextView massInfo, combinationInfo, doubleResultOutput;
+    private TextView massInfo, combinationInfo, doubleResultOutput, log;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
 
@@ -41,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
         massInfo = (TextView) findViewById(R.id.massInfo);
         combinationInfo = (TextView) findViewById(R.id.combination);
         doubleResultOutput = (TextView) findViewById(R.id.doubleResult);
+        log = (TextView) findViewById(R.id.log);
 
 
         final Button dropTheDices = (Button) findViewById(R.id.dropDice);
@@ -48,10 +49,12 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 firstPlayer.dropAllowedDices();
+                firstPlayer.increaseValueCounter();
                 firstPlayer.hasCombinations();
                 firstPlayer.resultToNumber();
                 printInfo(firstPlayer);
-                firstPlayer.resetValuesCounter();
+                log(); //Метод для проверки значений
+                firstPlayer.resetValues();
             }
         });
     }
@@ -104,23 +107,23 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onDiceLeft(View view) {
-        firstPlayer.dices = onDiceLeftImpl(view.getId());
+        firstPlayer.dices = onDiceLeftImpl(view.getId(), firstPlayer);
     }
 
-    private static Dice[] onDiceLeftImpl(int id) {
-        Dice[] dicesImage = new Dice[NUMBER_OF_DICES];
+    private static Dice[] onDiceLeftImpl(int id, Player player) {
+        Dice[] dices = player.dices;
         for (int i = 0; i < NUMBER_OF_DICES; i++) {
-            if (dicesImage[i].diceButton.getId() == id) {
-                if (!dicesImage[i].isLeft) {
-                    dicesImage[i].diceButton.setBackgroundColor(Color.BLACK);
-                    dicesImage[i].switchIsDiceLeft();
+            if (dices[i].diceButton.getId() == id) {
+                if (!dices[i].isLeft) {
+                    dices[i].diceButton.setBackgroundColor(Color.BLACK);
+                    dices[i].switchIsDiceLeft();
                 } else {
-                    dicesImage[i].diceButton.setBackgroundColor(Color.WHITE);
-                    dicesImage[i].switchIsDiceLeft();
+                    dices[i].diceButton.setBackgroundColor(Color.WHITE);
+                    dices[i].switchIsDiceLeft();
                 }
             }
         }
-        return dicesImage;
+        return dices;
     }
 
     public void printInfo(Player player) {
@@ -175,6 +178,30 @@ public class MainActivity extends ActionBarActivity {
             builder.append(getString(R.string.you_have_no_combinations));
             combinationInfo.setText(builder.toString());
         }
+    }
+
+    public void log() { //Метод для проверки значений
+        StringBuilder builder = new StringBuilder();
+        boolean isLeftMass[] = new boolean[NUMBER_OF_DICES];
+        StringBuilder builder1 = new StringBuilder();
+        for (int i = 0; i < NUMBER_OF_DICES; i++) {
+            isLeftMass[i] = firstPlayer.dices[i].isLeft;
+        }
+        for (boolean m : isLeftMass) {
+            builder1.append(" | " + m);
+        }
+
+        builder.append("hasNoComb: " + firstPlayer.hasNoComb + "\n" +
+                "hasPair: " + firstPlayer.hasPair + "\n" +
+                "hasTwoPair: " + firstPlayer.hasTwoPair + "\n" +
+                "hasThree: " + firstPlayer.hasThree + "\n" +
+                "hasLittleStrait: " + firstPlayer.hasLittleStrait + "\n" +
+                "hasBigStrait: " + firstPlayer.hasBigStrait + "\n" +
+                "hasFullHouse: " + firstPlayer.hasFullHouse + "\n" +
+                "hasFour: " + firstPlayer.hasFour + "\n" +
+                "hasPoker: " + firstPlayer.hasPoker + "\n" +
+                builder1);
+        log.setText(builder.toString());
     }
 
 }

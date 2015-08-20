@@ -147,5 +147,14 @@
         android:layout_below="@+id/combination"
         android:text="" />
 
+    <TextView
+        android:id="@+id/log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/doubleResult"
+        android:layout_alignStart="@+id/doubleResult"
+        android:layout_below="@+id/doubleResult"
+        android:text="" />
+
 
 </RelativeLayout>
