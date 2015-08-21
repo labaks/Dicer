@@ -17,8 +17,7 @@ public class GameActivity extends Activity {
     private final int DICE_SIDES = 6;
     public final int FIRST_PLAYER_SHIFT = 0;
     public final int SECOND_PLAYER_SHIFT = 5;
-    private TextView[] diceInfo = new TextView[NUMBER_OF_DICES]; // log
-    private TextView massInfo, combinationInfo1, combinationInfo2, doubleResultOutput1, doubleResultOutput2, log, winner;
+    private TextView combinationInfo1, combinationInfo2, winner;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
 
@@ -33,19 +32,13 @@ public class GameActivity extends Activity {
         AIPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-//        initDicesInfo(); // log
-
         final int diceWidth = (metrics.widthPixels - 20) / NUMBER_OF_DICES;
         cropDiceSides();
         initDicesImage(croppedDiceImage, diceWidth, firstPlayer, FIRST_PLAYER_SHIFT);
         initDicesImage(croppedDiceImage, diceWidth, AIPlayer, SECOND_PLAYER_SHIFT);
 
-        massInfo = (TextView) findViewById(R.id.massInfo);
         combinationInfo1 = (TextView) findViewById(R.id.combination);
-        doubleResultOutput1 = (TextView) findViewById(R.id.doubleResult);
         combinationInfo2 = (TextView) findViewById(R.id.combination2);
-        doubleResultOutput2 = (TextView) findViewById(R.id.doubleResult2);
-        log = (TextView) findViewById(R.id.log);
         winner = (TextView) findViewById(R.id.winner);
 
 
@@ -57,26 +50,18 @@ public class GameActivity extends Activity {
                 firstPlayer.increaseValueCounter();
                 firstPlayer.hasCombinations();
                 firstPlayer.resultToNumber();
-                printInfo(firstPlayer, combinationInfo1, doubleResultOutput1);
+                printInfo(firstPlayer, combinationInfo1);
 
                 AIPlayer.dropAllowedDices();
                 AIPlayer.increaseValueCounter();
                 AIPlayer.hasCombinations();
                 AIPlayer.resultToNumber();
-                printInfo(AIPlayer, combinationInfo2, doubleResultOutput2);
-//                log(); //Метод для проверки значений
+                printInfo(AIPlayer, combinationInfo2);
                 defineWinner(firstPlayer, AIPlayer);
                 AIPlayer.resetValues();
                 firstPlayer.resetValues();
             }
         });
-    }
-
-
-    private void initDicesInfo() { // log
-        for (int i = 0; i < NUMBER_OF_DICES; i++) {
-            diceInfo[i] = (TextView) findViewById(getBaseContext().getResources().getIdentifier("diceInfo" + (i + 1), "id", getBaseContext().getPackageName()));
-        }
     }
 
     private void initDicesImage(Bitmap[] background, int diceWidth, Player player, int shift) {
@@ -131,24 +116,11 @@ public class GameActivity extends Activity {
         }
     }
 
-    public void printInfo(Player player, TextView combinationInfo, TextView doubleResultOutput) {
+    public void printInfo(Player player, TextView combinationInfo) {
         for (int i = 0; i < NUMBER_OF_DICES; i++) {
-//            diceInfo[i].setText(                  // log
-//                    getString(getBaseContext().getResources().getIdentifier("dice_" + (i + 1), "string", getBaseContext().getPackageName())) +
-//                            ": " + Integer.toString(player.dices[i].value));
             player.dices[i].diceButton.setImageBitmap(croppedDiceImage[player.dices[i].value - 1]);
         }
         outputResult(player, combinationInfo);
-//        doubleResultOutput.setText(getString(R.string.numericalResult) + Double.toString(player.doubleResult));
-    }
-
-    public void printDroppedValuesCounts(int droppedValuesCounts[]) {
-        StringBuilder builder = new StringBuilder();
-        String separator = " | ";
-        for (int i = 0; i < droppedValuesCounts.length; i++) {
-            builder.append(i + 1).append(": ").append(Integer.toString(droppedValuesCounts[i])).append(separator);
-        }
-        massInfo.setText(builder.toString());
     }
 
     public void outputResult(Player player, TextView combinationInfo) {
@@ -183,31 +155,5 @@ public class GameActivity extends Activity {
             combinationInfo.setText(builder.toString());
         }
     }
-
-    public void log() { //Метод для проверки значений
-        printDroppedValuesCounts(firstPlayer.droppedValuesCount);
-        StringBuilder builder = new StringBuilder();
-        boolean isLeftMass[] = new boolean[NUMBER_OF_DICES];
-        StringBuilder builder1 = new StringBuilder();
-        for (int i = 0; i < NUMBER_OF_DICES; i++) {
-            isLeftMass[i] = firstPlayer.dices[i].isLeft;
-        }
-        for (boolean m : isLeftMass) {
-            builder1.append(" | " + m);
-        }
-
-        builder.append("hasNoComb: " + firstPlayer.hasNoComb + "\n" +
-                "hasPair: " + firstPlayer.hasPair + "\n" +
-                "hasTwoPair: " + firstPlayer.hasTwoPair + "\n" +
-                "hasThree: " + firstPlayer.hasThree + "\n" +
-                "hasLittleStrait: " + firstPlayer.hasLittleStrait + "\n" +
-                "hasBigStrait: " + firstPlayer.hasBigStrait + "\n" +
-                "hasFullHouse: " + firstPlayer.hasFullHouse + "\n" +
-                "hasFour: " + firstPlayer.hasFour + "\n" +
-                "hasPoker: " + firstPlayer.hasPoker + "\n" +
-                builder1);
-        log.setText(builder.toString());
-    }
-
 
 }

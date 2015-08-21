@@ -24,39 +24,6 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
-        <!--<TableRow>-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/diceInfo1"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/dice_1" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/diceInfo2"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/dice_2" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/diceInfo3"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/dice_3" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/diceInfo4"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/dice_4" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/diceInfo5"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/dice_5" />-->
-        <!--</TableRow>-->
-
         <TableRow>
 
             <ImageButton
@@ -122,47 +89,19 @@
         android:text="@string/info" />
 
     <TextView
-        android:id="@+id/massInfo"
-        android:layout_width="wrap_content"
+        android:id="@+id/combination"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/info"
         android:layout_alignStart="@+id/info"
         android:layout_below="@+id/info"
         android:text="" />
 
-    <TextView
-        android:id="@+id/combination"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/massInfo"
-        android:layout_alignStart="@+id/massInfo"
-        android:layout_below="@+id/massInfo"
-        android:text="" />
-
-    <TextView
-        android:id="@+id/doubleResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/combination"
-        android:layout_alignStart="@+id/combination"
-        android:layout_below="@+id/combination"
-        android:text="" />
-
-    <TextView
-        android:id="@+id/log"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/doubleResult"
-        android:layout_alignStart="@+id/doubleResult"
-        android:layout_below="@+id/doubleResult"
-        android:text="" />
-
-
     <TableLayout
         android:id="@+id/secondTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/log"
+        android:layout_below="@+id/combination"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
@@ -240,21 +179,12 @@
         android:text="" />
 
     <TextView
-        android:id="@+id/doubleResult2"
+        android:id="@+id/winner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/combination2"
         android:layout_alignStart="@+id/combination2"
         android:layout_below="@+id/combination2"
-        android:text="" />
-
-    <TextView
-        android:id="@+id/winner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/doubleResult2"
-        android:layout_alignStart="@+id/doubleResult2"
-        android:layout_below="@+id/doubleResult2"
         android:text="" />
 
 
