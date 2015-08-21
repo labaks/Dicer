@@ -21,4 +21,13 @@
     <string name="you_have_big_strait">Выпал большой стрит (от 2 до 6)</string>
     <string name="you_have_no_combinations">Не выпало ничего</string>
     <string name="numericalResult">Числовой результат: </string>
+    <string name="game">Игра</string>
+    <string name="player_vs_computer">Игрок против компьютера</string>
+    <string name="player_vs_player">Игрок против игрока</string>
+    <string name="exit">Выход</string>
+    <string name="exit_q">Выйти?</string>
+    <string name="sure_exit_q">Вы уверены, что хотите выйти?</string>
+    <string name="yes">Да</string>
+    <string name="double_press_ask">Нажмите еще раз чтобы выйти</string>
+    <string name="no">Нет</string>
 </resources>

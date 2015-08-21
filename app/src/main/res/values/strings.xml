@@ -22,4 +22,13 @@
     <string name="you_have_big_strait">You have big strait (from 2 to 6)</string>
     <string name="you_have_no_combinations">You have no combinations</string>
     <string name="numericalResult">Numerical result: </string>
+    <string name="game">Game</string>
+    <string name="player_vs_computer">Player vs computer</string>
+    <string name="player_vs_player">PLayer vs player</string>
+    <string name="exit">Exit</string>
+    <string name="exit_q">Exit?</string>
+    <string name="sure_exit_q">Are you sure you want to exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="double_press_ask">Press again to exit</string>
 </resources>

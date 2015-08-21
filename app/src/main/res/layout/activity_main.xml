@@ -2,159 +2,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/main_activity_vertical_margin"
+    android:paddingLeft="@dimen/main_activity_horizontal_margin"
+    android:paddingRight="@dimen/main_activity_horizontal_margin"
+    android:paddingTop="@dimen/main_activity_vertical_margin"
     tools:context=".MainActivity">
 
+
     <Button
-        android:id="@+id/dropDice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/drop_the_dice" />
+        android:text="@string/player_vs_computer"
+        android:id="@+id/onePlayer"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="toPlayerVsComp" />
 
-
-    <TableLayout
-        android:id="@+id/tableLayout"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dropDice"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:text="@string/player_vs_player"
+        android:id="@+id/twoPlayers"
+        android:layout_below="@+id/onePlayer"
+        android:layout_alignLeft="@+id/onePlayer"
+        android:layout_alignStart="@+id/onePlayer" />
 
-        <TableRow>
-
-            <TextView
-                android:id="@+id/diceInfo1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_1" />
-
-            <TextView
-                android:id="@+id/diceInfo2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_2" />
-
-            <TextView
-                android:id="@+id/diceInfo3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_3" />
-
-            <TextView
-                android:id="@+id/diceInfo4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_4" />
-
-            <TextView
-                android:id="@+id/diceInfo5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_5" />
-        </TableRow>
-
-        <TableRow>
-
-            <ImageButton
-                android:id="@+id/diceImage1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:background="#fff"
-                android:onClick="onDiceLeft"
-                android:padding="0dp"
-                android:scaleType="fitCenter" />
-
-            <ImageButton
-                android:id="@+id/diceImage2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:background="#fff"
-                android:onClick="onDiceLeft"
-                android:padding="0dp"
-                android:scaleType="fitCenter" />
-
-            <ImageButton
-                android:id="@+id/diceImage3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:background="#fff"
-                android:onClick="onDiceLeft"
-                android:padding="0dp"
-                android:scaleType="fitCenter" />
-
-            <ImageButton
-                android:id="@+id/diceImage4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:background="#fff"
-                android:onClick="onDiceLeft"
-                android:padding="0dp"
-                android:scaleType="fitCenter" />
-
-            <ImageButton
-                android:id="@+id/diceImage5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:background="#fff"
-                android:onClick="onDiceLeft"
-                android:padding="0dp"
-                android:scaleType="fitCenter" />
-        </TableRow>
-
-    </TableLayout>
-
-    <TextView
-        android:id="@+id/info"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tableLayout"
-        android:layout_alignStart="@+id/tableLayout"
-        android:layout_below="@+id/tableLayout"
-        android:text="@string/info" />
-
-    <TextView
-        android:id="@+id/massInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/info"
-        android:layout_alignStart="@+id/info"
-        android:layout_below="@+id/info"
-        android:text="" />
-
-    <TextView
-        android:id="@+id/combination"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/massInfo"
-        android:layout_alignStart="@+id/massInfo"
-        android:layout_below="@+id/massInfo"
-        android:text="" />
-
-    <TextView
-        android:id="@+id/doubleResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/combination"
-        android:layout_alignStart="@+id/combination"
-        android:layout_below="@+id/combination"
-        android:text="" />
-
-    <TextView
-        android:id="@+id/log"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/doubleResult"
-        android:layout_alignStart="@+id/doubleResult"
-        android:layout_below="@+id/doubleResult"
-        android:text="" />
-
-
+        android:text="@string/exit"
+        android:id="@+id/exit"
+        android:layout_below="@+id/twoPlayers"
+        android:layout_alignLeft="@+id/twoPlayers"
+        android:layout_alignStart="@+id/twoPlayers"
+        android:onClick="onExit" />
 </RelativeLayout>
