@@ -31,4 +31,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="double_press_ask">Press again to exit</string>
+    <string name="first_player_win">First player has win</string>
+    <string name="second_player_win">Second player has win</string>
+    <string name="dead_heat">Dead heat</string>
 </resources>

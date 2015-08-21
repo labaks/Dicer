@@ -174,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
-                android:onClick="onDiceLeft"
+                android:onClick="onDiceLeft2"
                 android:padding="0dp"
                 android:scaleType="fitCenter" />
 
@@ -184,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
-                android:onClick="onDiceLeft"
+                android:onClick="onDiceLeft2"
                 android:padding="0dp"
                 android:scaleType="fitCenter" />
 
@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
-                android:onClick="onDiceLeft"
+                android:onClick="onDiceLeft2"
                 android:padding="0dp"
                 android:scaleType="fitCenter" />
 
@@ -204,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
-                android:onClick="onDiceLeft"
+                android:onClick="onDiceLeft2"
                 android:padding="0dp"
                 android:scaleType="fitCenter" />
 
@@ -214,7 +214,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#fff"
-                android:onClick="onDiceLeft"
+                android:onClick="onDiceLeft2"
                 android:padding="0dp"
                 android:scaleType="fitCenter" />
         </TableRow>
@@ -247,5 +247,15 @@
         android:layout_alignStart="@+id/combination2"
         android:layout_below="@+id/combination2"
         android:text="" />
+
+    <TextView
+        android:id="@+id/winner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/doubleResult2"
+        android:layout_alignStart="@+id/doubleResult2"
+        android:layout_below="@+id/doubleResult2"
+        android:text="" />
+
 
 </RelativeLayout>

@@ -18,7 +18,7 @@ public class GameActivity extends Activity {
     public final int FIRST_PLAYER_SHIFT = 0;
     public final int SECOND_PLAYER_SHIFT = 5;
     private TextView[] diceInfo = new TextView[NUMBER_OF_DICES]; // log
-    private TextView massInfo, combinationInfo1, combinationInfo2, doubleResultOutput1, doubleResultOutput2, log;
+    private TextView massInfo, combinationInfo1, combinationInfo2, doubleResultOutput1, doubleResultOutput2, log, winner;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
 
@@ -46,6 +46,7 @@ public class GameActivity extends Activity {
         combinationInfo2 = (TextView) findViewById(R.id.combination2);
         doubleResultOutput2 = (TextView) findViewById(R.id.doubleResult2);
         log = (TextView) findViewById(R.id.log);
+        winner = (TextView) findViewById(R.id.winner);
 
 
         final Button dropTheDices = (Button) findViewById(R.id.dropDice);
@@ -64,6 +65,7 @@ public class GameActivity extends Activity {
                 AIPlayer.resultToNumber();
                 printInfo(AIPlayer, combinationInfo2, doubleResultOutput2);
 //                log(); //Метод для проверки значений
+                defineWinner(firstPlayer, AIPlayer);
                 AIPlayer.resetValues();
                 firstPlayer.resetValues();
             }
@@ -98,6 +100,10 @@ public class GameActivity extends Activity {
     public void onDiceLeft(View view) {
         firstPlayer.dices = onDiceLeftImpl(view.getId(), firstPlayer);
     }
+    public void onDiceLeft2(View view) {
+        AIPlayer.dices = onDiceLeftImpl(view.getId(), AIPlayer);
+    }
+
 
     private static Dice[] onDiceLeftImpl(int id, Player player) {
         Dice[] dices = player.dices;
@@ -115,6 +121,16 @@ public class GameActivity extends Activity {
         return dices;
     }
 
+    public void defineWinner(Player player1, Player player2) {
+        if (player1.doubleResult > player2.doubleResult) {
+            winner.setText(getString(R.string.first_player_win));
+        } else if (player1.doubleResult < player2.doubleResult){
+            winner.setText(getString(R.string.second_player_win));
+        } else {
+            winner.setText(getString(R.string.dead_heat));
+        }
+    }
+
     public void printInfo(Player player, TextView combinationInfo, TextView doubleResultOutput) {
         for (int i = 0; i < NUMBER_OF_DICES; i++) {
 //            diceInfo[i].setText(                  // log
@@ -123,7 +139,7 @@ public class GameActivity extends Activity {
             player.dices[i].diceButton.setImageBitmap(croppedDiceImage[player.dices[i].value - 1]);
         }
         outputResult(player, combinationInfo);
-        doubleResultOutput.setText(getString(R.string.numericalResult) + Double.toString(player.doubleResult));
+//        doubleResultOutput.setText(getString(R.string.numericalResult) + Double.toString(player.doubleResult));
     }
 
     public void printDroppedValuesCounts(int droppedValuesCounts[]) {

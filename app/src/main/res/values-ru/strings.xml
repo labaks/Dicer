@@ -30,4 +30,7 @@
     <string name="yes">Да</string>
     <string name="double_press_ask">Нажмите еще раз чтобы выйти</string>
     <string name="no">Нет</string>
+    <string name="second_player_win">Выиграл второй ирок</string>
+    <string name="first_player_win">Выиграл первый игрок </string>
+    <string name="dead_heat">Ничья</string>
 </resources>
