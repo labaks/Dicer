@@ -15,28 +15,36 @@ public class GameActivity extends Activity {
 
     private static final int NUMBER_OF_DICES = 5;
     private final int DICE_SIDES = 6;
-    private TextView[] diceInfo = new TextView[NUMBER_OF_DICES];
-    private TextView massInfo, combinationInfo, doubleResultOutput, log;
+    public final int FIRST_PLAYER_SHIFT = 0;
+    public final int SECOND_PLAYER_SHIFT = 5;
+    private TextView[] diceInfo = new TextView[NUMBER_OF_DICES]; // log
+    private TextView massInfo, combinationInfo1, combinationInfo2, doubleResultOutput1, doubleResultOutput2, log;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
 
     Player firstPlayer;
+    Player AIPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
         firstPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+        AIPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        initDicesInfo();
+//        initDicesInfo(); // log
 
         final int diceWidth = (metrics.widthPixels - 20) / NUMBER_OF_DICES;
         cropDiceSides();
-        initDicesImage(croppedDiceImage, diceWidth, firstPlayer);
+        initDicesImage(croppedDiceImage, diceWidth, firstPlayer, FIRST_PLAYER_SHIFT);
+        initDicesImage(croppedDiceImage, diceWidth, AIPlayer, SECOND_PLAYER_SHIFT);
+
         massInfo = (TextView) findViewById(R.id.massInfo);
-        combinationInfo = (TextView) findViewById(R.id.combination);
-        doubleResultOutput = (TextView) findViewById(R.id.doubleResult);
+        combinationInfo1 = (TextView) findViewById(R.id.combination);
+        doubleResultOutput1 = (TextView) findViewById(R.id.doubleResult);
+        combinationInfo2 = (TextView) findViewById(R.id.combination2);
+        doubleResultOutput2 = (TextView) findViewById(R.id.doubleResult2);
         log = (TextView) findViewById(R.id.log);
 
 
@@ -48,25 +56,32 @@ public class GameActivity extends Activity {
                 firstPlayer.increaseValueCounter();
                 firstPlayer.hasCombinations();
                 firstPlayer.resultToNumber();
-                printInfo(firstPlayer);
-                log(); //Метод для проверки значений
+                printInfo(firstPlayer, combinationInfo1, doubleResultOutput1);
+
+                AIPlayer.dropAllowedDices();
+                AIPlayer.increaseValueCounter();
+                AIPlayer.hasCombinations();
+                AIPlayer.resultToNumber();
+                printInfo(AIPlayer, combinationInfo2, doubleResultOutput2);
+//                log(); //Метод для проверки значений
+                AIPlayer.resetValues();
                 firstPlayer.resetValues();
             }
         });
-
     }
 
-    private void initDicesInfo() {
+
+    private void initDicesInfo() { // log
         for (int i = 0; i < NUMBER_OF_DICES; i++) {
             diceInfo[i] = (TextView) findViewById(getBaseContext().getResources().getIdentifier("diceInfo" + (i + 1), "id", getBaseContext().getPackageName()));
         }
     }
 
-    private void initDicesImage(Bitmap[] background, int diceWidth, Player player) {
+    private void initDicesImage(Bitmap[] background, int diceWidth, Player player, int shift) {
         Dice[] dicesImage = new Dice[NUMBER_OF_DICES];
         for (int i = 0; i < NUMBER_OF_DICES; i++) {
             dicesImage[i] = new Dice();
-            dicesImage[i].diceButton = (ImageButton) findViewById(getBaseContext().getResources().getIdentifier("diceImage" + (i + 1), "id", getBaseContext().getPackageName()));
+            dicesImage[i].diceButton = (ImageButton) findViewById(getBaseContext().getResources().getIdentifier("diceImage" + (i + 1 + shift), "id", getBaseContext().getPackageName()));
             dicesImage[i].diceButton.setMaxWidth(diceWidth);
             dicesImage[i].diceButton.setImageBitmap(background[i]);
         }
@@ -100,15 +115,14 @@ public class GameActivity extends Activity {
         return dices;
     }
 
-    public void printInfo(Player player) {
+    public void printInfo(Player player, TextView combinationInfo, TextView doubleResultOutput) {
         for (int i = 0; i < NUMBER_OF_DICES; i++) {
-            diceInfo[i].setText(
-                    getString(getBaseContext().getResources().getIdentifier("dice_" + (i + 1), "string", getBaseContext().getPackageName())) +
-                            ": " + Integer.toString(player.dices[i].value));
+//            diceInfo[i].setText(                  // log
+//                    getString(getBaseContext().getResources().getIdentifier("dice_" + (i + 1), "string", getBaseContext().getPackageName())) +
+//                            ": " + Integer.toString(player.dices[i].value));
             player.dices[i].diceButton.setImageBitmap(croppedDiceImage[player.dices[i].value - 1]);
         }
-        printDroppedValuesCounts(player.droppedValuesCount);
-        outputResult(player);
+        outputResult(player, combinationInfo);
         doubleResultOutput.setText(getString(R.string.numericalResult) + Double.toString(player.doubleResult));
     }
 
@@ -121,7 +135,7 @@ public class GameActivity extends Activity {
         massInfo.setText(builder.toString());
     }
 
-    public void outputResult(Player player) {
+    public void outputResult(Player player, TextView combinationInfo) {
         StringBuilder builder = new StringBuilder();
         String space = " ";
         if (player.hasPoker) {
@@ -155,6 +169,7 @@ public class GameActivity extends Activity {
     }
 
     public void log() { //Метод для проверки значений
+        printDroppedValuesCounts(firstPlayer.droppedValuesCount);
         StringBuilder builder = new StringBuilder();
         boolean isLeftMass[] = new boolean[NUMBER_OF_DICES];
         StringBuilder builder1 = new StringBuilder();
@@ -177,4 +192,6 @@ public class GameActivity extends Activity {
                 builder1);
         log.setText(builder.toString());
     }
+
+
 }

@@ -24,38 +24,38 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
-        <TableRow>
+        <!--<TableRow>-->
 
-            <TextView
-                android:id="@+id/diceInfo1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_1" />
+        <!--<TextView-->
+        <!--android:id="@+id/diceInfo1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/dice_1" />-->
 
-            <TextView
-                android:id="@+id/diceInfo2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_2" />
+        <!--<TextView-->
+        <!--android:id="@+id/diceInfo2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/dice_2" />-->
 
-            <TextView
-                android:id="@+id/diceInfo3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_3" />
+        <!--<TextView-->
+        <!--android:id="@+id/diceInfo3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/dice_3" />-->
 
-            <TextView
-                android:id="@+id/diceInfo4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_4" />
+        <!--<TextView-->
+        <!--android:id="@+id/diceInfo4"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/dice_4" />-->
 
-            <TextView
-                android:id="@+id/diceInfo5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dice_5" />
-        </TableRow>
+        <!--<TextView-->
+        <!--android:id="@+id/diceInfo5"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/dice_5" />-->
+        <!--</TableRow>-->
 
         <TableRow>
 
@@ -155,6 +155,97 @@
         android:layout_alignLeft="@+id/doubleResult"
         android:layout_alignStart="@+id/doubleResult"
         android:layout_below="@+id/doubleResult"
+        android:text="" />
+
+
+    <TableLayout
+        android:id="@+id/secondTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/log"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TableRow>
+
+            <ImageButton
+                android:id="@+id/diceImage6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="#fff"
+                android:onClick="onDiceLeft"
+                android:padding="0dp"
+                android:scaleType="fitCenter" />
+
+            <ImageButton
+                android:id="@+id/diceImage7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="#fff"
+                android:onClick="onDiceLeft"
+                android:padding="0dp"
+                android:scaleType="fitCenter" />
+
+            <ImageButton
+                android:id="@+id/diceImage8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="#fff"
+                android:onClick="onDiceLeft"
+                android:padding="0dp"
+                android:scaleType="fitCenter" />
+
+            <ImageButton
+                android:id="@+id/diceImage9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="#fff"
+                android:onClick="onDiceLeft"
+                android:padding="0dp"
+                android:scaleType="fitCenter" />
+
+            <ImageButton
+                android:id="@+id/diceImage10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="#fff"
+                android:onClick="onDiceLeft"
+                android:padding="0dp"
+                android:scaleType="fitCenter" />
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/info2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/secondTable"
+        android:layout_alignStart="@+id/secondTable"
+        android:layout_below="@+id/secondTable"
+        android:text="@string/info" />
+
+    <TextView
+        android:id="@+id/combination2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/info2"
+        android:layout_alignStart="@+id/info2"
+        android:layout_below="@+id/info2"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/doubleResult2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/combination2"
+        android:layout_alignStart="@+id/combination2"
+        android:layout_below="@+id/combination2"
         android:text="" />
 
 </RelativeLayout>
