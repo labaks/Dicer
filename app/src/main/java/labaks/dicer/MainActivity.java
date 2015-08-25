@@ -14,6 +14,9 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
     private static long back_pressed;
+    public final static String GAME_MODE = "labaks.dicer.game_mode";
+    public final static String PLAYER_VS_AI = "labaks.dicer.game_mode.player_vs_ai";
+    public final static String PLAYER_VS_PLAYER = "labaks.dicer.game_mode.player_vs_player";
 
 
     @Override
@@ -49,6 +52,13 @@ public class MainActivity extends Activity {
 
     public void toPlayerVsComp(View view) {
         Intent intent = new Intent(MainActivity.this, GameActivity.class);
+        intent.putExtra(GAME_MODE, PLAYER_VS_AI);
+        startActivity(intent);
+    }
+
+    public void toPlayerVsPlayer(View view) {
+        Intent intent = new Intent(MainActivity.this, GameActivity.class);
+        intent.putExtra(GAME_MODE, PLAYER_VS_PLAYER);
         startActivity(intent);
     }
 

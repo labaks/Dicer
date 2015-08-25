@@ -34,4 +34,9 @@
     <string name="first_player_win">First player has win</string>
     <string name="second_player_win">Second player has win</string>
     <string name="dead_heat">Dead heat</string>
+    <string name="drop_dice_first_player">Drop dices of the first player</string>
+    <string name="drop_dice_second_player">Drop dices of the second player</string>
+    <string name="new_game">New Game</string>
+    <string name="new_game_q">Start new game?</string>
+    <string name="ok">Ok</string>
 </resources>

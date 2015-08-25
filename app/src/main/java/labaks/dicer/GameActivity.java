@@ -1,6 +1,8 @@
 package labaks.dicer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
@@ -18,50 +21,80 @@ public class GameActivity extends Activity {
     public final int FIRST_PLAYER_SHIFT = 0;
     public final int SECOND_PLAYER_SHIFT = 5;
     private TextView combinationInfo1, combinationInfo2, winner;
+    private Button dropSecondPlayerDice, dropFirstPlayerDice;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
+    public String game_mode;
+    public int diceWidth;
+    public boolean isFirstPlayerDrop = false;
+    public boolean isSecondPlayerDrop = false;
 
     Player firstPlayer;
     Player AIPlayer;
+    Player secondPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
-        firstPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
-        AIPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        final int diceWidth = (metrics.widthPixels - 20) / NUMBER_OF_DICES;
+        game_mode = getIntent().getStringExtra(MainActivity.GAME_MODE);
+        diceWidth = (metrics.widthPixels - 20) / NUMBER_OF_DICES;
         cropDiceSides();
-        initDicesImage(croppedDiceImage, diceWidth, firstPlayer, FIRST_PLAYER_SHIFT);
-        initDicesImage(croppedDiceImage, diceWidth, AIPlayer, SECOND_PLAYER_SHIFT);
+        initGame();
+    }
 
+    public void initGame() {
+        firstPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+        initDicesImage(croppedDiceImage, diceWidth, firstPlayer, FIRST_PLAYER_SHIFT);
         combinationInfo1 = (TextView) findViewById(R.id.combination);
         combinationInfo2 = (TextView) findViewById(R.id.combination2);
         winner = (TextView) findViewById(R.id.winner);
+        dropFirstPlayerDice = (Button) findViewById(R.id.dropFirstPlayerDice);
+        dropSecondPlayerDice = (Button) findViewById(R.id.dropSecondPlayerDice);
 
+        switch (game_mode) {
+            case MainActivity.PLAYER_VS_AI:
+                dropSecondPlayerDice.setVisibility(View.GONE);
+                dropFirstPlayerDice.setText(getString(R.string.drop_the_dice));
+                AIPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+                initDicesImage(croppedDiceImage, diceWidth, AIPlayer, SECOND_PLAYER_SHIFT);
+                break;
+            case MainActivity.PLAYER_VS_PLAYER:
+                dropSecondPlayerDice.setVisibility(View.VISIBLE);
+                secondPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+                initDicesImage(croppedDiceImage, diceWidth, secondPlayer, SECOND_PLAYER_SHIFT);
+                break;
+        }
+    }
 
-        final Button dropTheDices = (Button) findViewById(R.id.dropDice);
-        dropTheDices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                firstPlayer.dropAllowedDices();
-                firstPlayer.increaseValueCounter();
-                firstPlayer.hasCombinations();
-                firstPlayer.resultToNumber();
-                printInfo(firstPlayer, combinationInfo1);
+    public void game() {
+        if (!isFirstPlayerDrop && !isSecondPlayerDrop) {
+            playerDropDice(firstPlayer, combinationInfo1);
+            playerDropDice(AIPlayer, combinationInfo2);
+            AIPlayer.resetValues();
+            firstPlayer.resetValues();
+            isFirstPlayerDrop = true;
+            isSecondPlayerDrop = true;
+        } else if (isFirstPlayerDrop && isSecondPlayerDrop) {
+            playerDropDice(firstPlayer, combinationInfo1);
+            playerDropDice(AIPlayer, combinationInfo2);
+            defineWinner(firstPlayer, AIPlayer);
+            AIPlayer.resetValues();
+            firstPlayer.resetValues();
+            showNewGameDialog();
+            isFirstPlayerDrop = false;
+            isSecondPlayerDrop = false;
+        }
+    }
 
-                AIPlayer.dropAllowedDices();
-                AIPlayer.increaseValueCounter();
-                AIPlayer.hasCombinations();
-                AIPlayer.resultToNumber();
-                printInfo(AIPlayer, combinationInfo2);
-                defineWinner(firstPlayer, AIPlayer);
-                AIPlayer.resetValues();
-                firstPlayer.resetValues();
-            }
-        });
+    public void playerDropDice(Player player, TextView infoText) {
+        player.dropAllowedDices();
+        player.increaseValueCounter();
+        player.hasCombinations();
+        player.resultToNumber();
+        printInfo(player, infoText);
     }
 
     private void initDicesImage(Bitmap[] background, int diceWidth, Player player, int shift) {
@@ -85,8 +118,11 @@ public class GameActivity extends Activity {
     public void onDiceLeft(View view) {
         firstPlayer.dices = onDiceLeftImpl(view.getId(), firstPlayer);
     }
+
     public void onDiceLeft2(View view) {
-        AIPlayer.dices = onDiceLeftImpl(view.getId(), AIPlayer);
+        if(game_mode.equals(MainActivity.PLAYER_VS_PLAYER)) {
+            secondPlayer.dices = onDiceLeftImpl(view.getId(), secondPlayer);
+        }
     }
 
 
@@ -109,12 +145,40 @@ public class GameActivity extends Activity {
     public void defineWinner(Player player1, Player player2) {
         if (player1.doubleResult > player2.doubleResult) {
             winner.setText(getString(R.string.first_player_win));
-        } else if (player1.doubleResult < player2.doubleResult){
+        } else if (player1.doubleResult < player2.doubleResult) {
             winner.setText(getString(R.string.second_player_win));
         } else {
             winner.setText(getString(R.string.dead_heat));
         }
     }
+
+    public void dropFirstPlayerDice(View view) {
+        game();
+    }
+
+    public void dropSecondPlayerDice(View view) {
+        Toast toast = Toast.makeText(getApplicationContext(), game_mode, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public void showNewGameDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
+        builder.setTitle(getString(R.string.new_game))
+                .setMessage(winner.getText() + "\n" + getString(R.string.new_game_q))
+                .setCancelable(false)
+                .setNegativeButton(getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                winner.setText("");
+                                dialogInterface.cancel();
+                            }
+                        });
+        AlertDialog newGameDialog = builder.create();
+        newGameDialog.show();
+    }
+
 
     public void printInfo(Player player, TextView combinationInfo) {
         for (int i = 0; i < NUMBER_OF_DICES; i++) {

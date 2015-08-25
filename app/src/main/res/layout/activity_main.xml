@@ -25,7 +25,8 @@
         android:id="@+id/twoPlayers"
         android:layout_below="@+id/onePlayer"
         android:layout_alignLeft="@+id/onePlayer"
-        android:layout_alignStart="@+id/onePlayer" />
+        android:layout_alignStart="@+id/onePlayer"
+        android:onClick="toPlayerVsPlayer"/>
 
     <Button
         android:layout_width="match_parent"

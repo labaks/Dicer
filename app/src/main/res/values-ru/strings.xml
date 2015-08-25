@@ -33,4 +33,9 @@
     <string name="second_player_win">Выиграл второй ирок</string>
     <string name="first_player_win">Выиграл первый игрок </string>
     <string name="dead_heat">Ничья</string>
+    <string name="drop_dice_second_player">Кинуть кубики второго игрока</string>
+    <string name="new_game_q">Начать новую игру?</string>
+    <string name="ok">Ок</string>
+    <string name="drop_dice_first_player">Кинуть кубики первого игрока</string>
+    <string name="new_game">Новая игра</string>
 </resources>

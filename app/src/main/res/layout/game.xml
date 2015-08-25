@@ -10,17 +10,21 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/dropDice"
+        android:id="@+id/dropFirstPlayerDice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/drop_the_dice" />
+        android:text="@string/drop_dice_first_player"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="dropFirstPlayerDice"/>
 
 
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dropDice"
+        android:layout_below="@+id/dropFirstPlayerDice"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
@@ -186,6 +190,15 @@
         android:layout_alignStart="@+id/combination2"
         android:layout_below="@+id/combination2"
         android:text="" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drop_dice_second_player"
+        android:id="@+id/dropSecondPlayerDice"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="dropSecondPlayerDice"/>
 
 
 </RelativeLayout>
