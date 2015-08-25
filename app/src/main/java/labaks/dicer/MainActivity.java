@@ -15,8 +15,8 @@ public class MainActivity extends Activity {
 
     private static long back_pressed;
     public final static String GAME_MODE = "labaks.dicer.game_mode";
-    public final static String PLAYER_VS_AI = "labaks.dicer.game_mode.player_vs_ai";
-    public final static String PLAYER_VS_PLAYER = "labaks.dicer.game_mode.player_vs_player";
+    public final static String PLAYER_VS_AI = "player_vs_ai";
+    public final static String PLAYER_VS_PLAYER = "player_vs_player";
 
 
     @Override

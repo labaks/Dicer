@@ -24,7 +24,7 @@ public class GameActivity extends Activity {
     private Button dropSecondPlayerDice, dropFirstPlayerDice;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
-    public String game_mode;
+    public String game_mode, pvc, pvp;
     public int diceWidth;
     public boolean isFirstPlayerDrop = false;
     public boolean isSecondPlayerDrop = false;
@@ -40,6 +40,8 @@ public class GameActivity extends Activity {
 
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         game_mode = getIntent().getStringExtra(MainActivity.GAME_MODE);
+        pvc = MainActivity.PLAYER_VS_AI;
+        pvp = MainActivity.PLAYER_VS_PLAYER;
         diceWidth = (metrics.widthPixels - 20) / NUMBER_OF_DICES;
         cropDiceSides();
         initGame();
@@ -69,7 +71,7 @@ public class GameActivity extends Activity {
         }
     }
 
-    public void game() {
+    public void gamePVC() {
         if (!isFirstPlayerDrop && !isSecondPlayerDrop) {
             playerDropDice(firstPlayer, combinationInfo1);
             playerDropDice(AIPlayer, combinationInfo2);
@@ -86,6 +88,28 @@ public class GameActivity extends Activity {
             showNewGameDialog();
             isFirstPlayerDrop = false;
             isSecondPlayerDrop = false;
+        }
+    }
+
+    public void gamePVP() {
+        if (!isFirstPlayerDrop && !isSecondPlayerDrop) {
+            playerDropDice(firstPlayer, combinationInfo1);
+            firstPlayer.resetValues();
+            isFirstPlayerDrop = true;
+        } else if (isFirstPlayerDrop && !isSecondPlayerDrop) {
+            playerDropDice(secondPlayer, combinationInfo2);
+            secondPlayer.resetValues();
+            isSecondPlayerDrop = true;
+        } else if (isFirstPlayerDrop) {
+            playerDropDice(firstPlayer, combinationInfo1);
+            firstPlayer.resetValues();
+            isFirstPlayerDrop = false;
+        } else {
+            playerDropDice(secondPlayer, combinationInfo2);
+            secondPlayer.resetValues();
+            isSecondPlayerDrop = false;
+            defineWinner(firstPlayer, secondPlayer);
+            showNewGameDialog();
         }
     }
 
@@ -120,7 +144,7 @@ public class GameActivity extends Activity {
     }
 
     public void onDiceLeft2(View view) {
-        if(game_mode.equals(MainActivity.PLAYER_VS_PLAYER)) {
+        if (game_mode.equals(pvp)) {
             secondPlayer.dices = onDiceLeftImpl(view.getId(), secondPlayer);
         }
     }
@@ -153,12 +177,15 @@ public class GameActivity extends Activity {
     }
 
     public void dropFirstPlayerDice(View view) {
-        game();
+        if(game_mode.equals(pvc)) {
+            gamePVC();
+        } else if (game_mode.equals(pvp)) {
+            gamePVP();
+        }
     }
 
     public void dropSecondPlayerDice(View view) {
-        Toast toast = Toast.makeText(getApplicationContext(), game_mode, Toast.LENGTH_SHORT);
-        toast.show();
+        gamePVP();
     }
 
     public void showNewGameDialog() {
@@ -170,7 +197,6 @@ public class GameActivity extends Activity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
                                 winner.setText("");
                                 dialogInterface.cancel();
                             }
