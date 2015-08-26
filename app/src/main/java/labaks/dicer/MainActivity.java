@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-
 public class MainActivity extends Activity {
 
     private static long back_pressed;
@@ -18,13 +17,10 @@ public class MainActivity extends Activity {
     public final static String PLAYER_VS_AI = "player_vs_ai";
     public final static String PLAYER_VS_PLAYER = "player_vs_player";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
     }
 
     @Override
@@ -48,7 +44,6 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
     public void toPlayerVsComp(View view) {
         Intent intent = new Intent(MainActivity.this, GameActivity.class);
