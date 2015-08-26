@@ -186,18 +186,18 @@ public class GameActivity extends Activity {
 
     public void dropFirstPlayerDice(View view) {
         if (game_mode.equals(pvc)) {
-            gamePVC();
             firstPlayerTable.setVisibility(View.VISIBLE);
             secondPlayerTable.setVisibility(View.VISIBLE);
+            gamePVC();
         } else if (game_mode.equals(pvp)) {
-            gamePVP();
             firstPlayerTable.setVisibility(View.VISIBLE);
+            gamePVP();
         }
     }
 
     public void dropSecondPlayerDice(View view) {
-        gamePVP();
         secondPlayerTable.setVisibility(View.VISIBLE);
+        gamePVP();
     }
 
     public void disableDices() {
