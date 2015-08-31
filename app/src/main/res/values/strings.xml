@@ -39,4 +39,6 @@
     <string name="new_game">New Game</string>
     <string name="new_game_q">Start new game?</string>
     <string name="ok">OK</string>
+    <string name="bank">Bank:</string>
+    <string name="money_count">Count of money:</string>
 </resources>

@@ -31,6 +31,8 @@ public class Player {
 
     public int[] droppedValuesCount;
 
+    int money = 100;
+
     public Player(int diceSides, int numberOfDices) {
         this.diceSides = diceSides;
         this.numberOfDices = numberOfDices;

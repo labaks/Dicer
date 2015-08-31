@@ -88,12 +88,30 @@
     </TableLayout>
 
     <TextView
-        android:id="@+id/combination2"
+        android:id="@+id/secondPlayerCombination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/secondTable"
         android:layout_alignStart="@+id/secondTable"
         android:layout_below="@+id/secondTable"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/secondPlayerMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/secondTable"
+        android:layout_alignStart="@+id/secondTable"
+        android:layout_below="@+id/secondPlayerCombination"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/bank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:text="" />
 
     <TextView
@@ -103,10 +121,18 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_below="@+id/bank"
         android:text="" />
 
     <TextView
-        android:id="@+id/combination"
+        android:id="@+id/firstPlayerMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/firstPlayerCombination"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/firstPlayerCombination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/firstTable"

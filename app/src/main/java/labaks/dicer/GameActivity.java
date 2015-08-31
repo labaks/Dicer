@@ -20,13 +20,13 @@ public class GameActivity extends Activity {
     private final int DICE_SIDES = 6;
     public final int FIRST_PLAYER_SHIFT = 0;
     public final int SECOND_PLAYER_SHIFT = 5;
-    private TextView combinationInfo1, combinationInfo2, winner;
+    private TextView firstPlayerCombInfo, secondPlayerCombInfo, winner, firstPlayerMoney, secondPlayerMoney, bankInfo;
     private Button dropSecondPlayerDice, dropFirstPlayerDice;
     private TableLayout firstPlayerTable, secondPlayerTable;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
     public String game_mode, pvc, pvp;
-    public int diceWidth;
+    public int diceWidth, bank;
     public boolean isFirstPlayerTurn = true;
 
     Player firstPlayer;
@@ -48,41 +48,48 @@ public class GameActivity extends Activity {
     public void initGame() {
         firstPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
         initDicesImage(croppedDiceImage, diceWidth, firstPlayer, FIRST_PLAYER_SHIFT);
-        combinationInfo1 = (TextView) findViewById(R.id.combination);
-        combinationInfo2 = (TextView) findViewById(R.id.combination2);
+        secondPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+        initDicesImage(croppedDiceImage, diceWidth, secondPlayer, SECOND_PLAYER_SHIFT);
+        firstPlayerCombInfo = (TextView) findViewById(R.id.firstPlayerCombination);
+        secondPlayerCombInfo = (TextView) findViewById(R.id.secondPlayerCombination);
+        firstPlayerMoney = (TextView) findViewById(R.id.firstPlayerMoney);
+        secondPlayerMoney = (TextView) findViewById(R.id.secondPlayerMoney);
         winner = (TextView) findViewById(R.id.winner);
+        bankInfo = (TextView) findViewById(R.id.bank);
         dropFirstPlayerDice = (Button) findViewById(R.id.dropFirstPlayerDice);
         dropSecondPlayerDice = (Button) findViewById(R.id.dropSecondPlayerDice);
         firstPlayerTable = (TableLayout) findViewById(R.id.firstTable);
         secondPlayerTable = (TableLayout) findViewById(R.id.secondTable);
 
+        printPlayerMoney(firstPlayer, firstPlayerMoney);
+        printPlayerMoney(secondPlayer, secondPlayerMoney);
+        printBankInfo();
+
+        showNewGameDialog();
+
         switch (game_mode) {
             case MainActivity.PLAYER_VS_AI:
                 dropSecondPlayerDice.setVisibility(View.GONE);
                 dropFirstPlayerDice.setText(getString(R.string.drop_the_dice));
-                secondPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
-                initDicesImage(croppedDiceImage, diceWidth, secondPlayer, SECOND_PLAYER_SHIFT);
                 break;
             case MainActivity.PLAYER_VS_PLAYER:
                 dropSecondPlayerDice.setVisibility(View.VISIBLE);
-                secondPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
-                initDicesImage(croppedDiceImage, diceWidth, secondPlayer, SECOND_PLAYER_SHIFT);
                 break;
         }
     }
 
     public void gamePVC() {
         if (!firstPlayer.isDrop && !secondPlayer.isDrop) {
-            playerDropDice(firstPlayer, combinationInfo1);
-            playerDropDice(secondPlayer, combinationInfo2);
+            playerDropDice(firstPlayer, firstPlayerCombInfo);
+            playerDropDice(secondPlayer, secondPlayerCombInfo);
             secondPlayer.resetValues();
             firstPlayer.resetValues();
             firstPlayer.isDrop = true;
             secondPlayer.isDrop = true;
         } else if (firstPlayer.isDrop && secondPlayer.isDrop) {
-            playerDropDice(firstPlayer, combinationInfo1);
-            playerDropDice(secondPlayer, combinationInfo2);
-            defineWinner(firstPlayer, secondPlayer);
+            playerDropDice(firstPlayer, firstPlayerCombInfo);
+            playerDropDice(secondPlayer, secondPlayerCombInfo);
+            defineWinner();
             secondPlayer.resetValues();
             firstPlayer.resetValues();
             showNewGameDialog();
@@ -93,7 +100,7 @@ public class GameActivity extends Activity {
 
     public void gamePVP() {
         if ((!firstPlayer.isDrop && !secondPlayer.isDrop) || (firstPlayer.isDrop && secondPlayer.isDrop)) {
-            playerDropDice(firstPlayer, combinationInfo1);
+            playerDropDice(firstPlayer, firstPlayerCombInfo);
             firstPlayer.resetValues();
             firstPlayer.isDrop = !firstPlayer.isDrop;
             isFirstPlayerTurn = !isFirstPlayerTurn;
@@ -101,7 +108,7 @@ public class GameActivity extends Activity {
             dropSecondPlayerDice.setEnabled(true);
             disableDices();
         } else {
-            playerDropDice(secondPlayer, combinationInfo2);
+            playerDropDice(secondPlayer, secondPlayerCombInfo);
             secondPlayer.resetValues();
             secondPlayer.isDrop = !secondPlayer.isDrop;
             isFirstPlayerTurn = !isFirstPlayerTurn;
@@ -110,7 +117,7 @@ public class GameActivity extends Activity {
             disableDices();
         }
         if (!firstPlayer.isDrop && !secondPlayer.isDrop) {
-            defineWinner(firstPlayer, secondPlayer);
+            defineWinner();
             showNewGameDialog();
         }
     }
@@ -171,11 +178,13 @@ public class GameActivity extends Activity {
         return dices;
     }
 
-    public void defineWinner(Player player1, Player player2) {
-        if (player1.doubleResult > player2.doubleResult) {
+    public void defineWinner() {
+        if (firstPlayer.doubleResult > secondPlayer.doubleResult) {
             winner.setText(getString(R.string.first_player_win));
-        } else if (player1.doubleResult < player2.doubleResult) {
+            firstPlayer.money += bank;
+        } else if (firstPlayer.doubleResult < secondPlayer.doubleResult) {
             winner.setText(getString(R.string.second_player_win));
+            secondPlayer.money += bank;
         } else {
             winner.setText(getString(R.string.dead_heat));
         }
@@ -209,6 +218,16 @@ public class GameActivity extends Activity {
         }
     }
 
+    public void blinds() {
+        int blind = 2;
+        firstPlayer.money -= blind;
+        secondPlayer.money -= blind;
+        bank = 2 * blind;
+        printPlayerMoney(firstPlayer, firstPlayerMoney);
+        printPlayerMoney(secondPlayer, secondPlayerMoney);
+        printBankInfo();
+    }
+
     public void showNewGameDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
         builder.setTitle(getString(R.string.new_game))
@@ -218,11 +237,12 @@ public class GameActivity extends Activity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                combinationInfo1.setText("");
-                                combinationInfo2.setText("");
+                                firstPlayerCombInfo.setText("");
+                                secondPlayerCombInfo.setText("");
                                 winner.setText("");
                                 firstPlayerTable.setVisibility(View.GONE);
                                 secondPlayerTable.setVisibility(View.GONE);
+                                blinds();
                                 dialogInterface.cancel();
                             }
                         });
@@ -235,6 +255,15 @@ public class GameActivity extends Activity {
             player.dices[i].diceButton.setImageBitmap(croppedDiceImage[player.dices[i].value - 1]);
         }
         outputResult(player, combinationInfo);
+        printBankInfo();
+    }
+
+    public void printBankInfo() {
+        bankInfo.setText(getString(R.string.bank) + " " + bank);
+    }
+
+    public void printPlayerMoney(Player player, TextView playerMoney) {
+        playerMoney.setText(getString(R.string.money_count) + " " + player.money);
     }
 
     public void outputResult(Player player, TextView combinationInfo) {
