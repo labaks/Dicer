@@ -7,6 +7,8 @@ public class Player {
 
     public Dice[] dices;
 
+    boolean isDrop = false;
+
     boolean hasNoComb = false;
     boolean hasPair = false;
     boolean hasTwoPair = false;

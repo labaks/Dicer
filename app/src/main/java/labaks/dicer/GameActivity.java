@@ -27,12 +27,9 @@ public class GameActivity extends Activity {
     private final static DisplayMetrics metrics = new DisplayMetrics();
     public String game_mode, pvc, pvp;
     public int diceWidth;
-    public boolean isFirstPlayerDrop = false;
-    public boolean isSecondPlayerDrop = false;
     public boolean isFirstPlayerTurn = true;
 
     Player firstPlayer;
-    Player AIPlayer;
     Player secondPlayer;
 
     @Override
@@ -63,8 +60,8 @@ public class GameActivity extends Activity {
             case MainActivity.PLAYER_VS_AI:
                 dropSecondPlayerDice.setVisibility(View.GONE);
                 dropFirstPlayerDice.setText(getString(R.string.drop_the_dice));
-                AIPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
-                initDicesImage(croppedDiceImage, diceWidth, AIPlayer, SECOND_PLAYER_SHIFT);
+                secondPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+                initDicesImage(croppedDiceImage, diceWidth, secondPlayer, SECOND_PLAYER_SHIFT);
                 break;
             case MainActivity.PLAYER_VS_PLAYER:
                 dropSecondPlayerDice.setVisibility(View.VISIBLE);
@@ -75,30 +72,30 @@ public class GameActivity extends Activity {
     }
 
     public void gamePVC() {
-        if (!isFirstPlayerDrop && !isSecondPlayerDrop) {
+        if (!firstPlayer.isDrop && !secondPlayer.isDrop) {
             playerDropDice(firstPlayer, combinationInfo1);
-            playerDropDice(AIPlayer, combinationInfo2);
-            AIPlayer.resetValues();
+            playerDropDice(secondPlayer, combinationInfo2);
+            secondPlayer.resetValues();
             firstPlayer.resetValues();
-            isFirstPlayerDrop = true;
-            isSecondPlayerDrop = true;
-        } else if (isFirstPlayerDrop && isSecondPlayerDrop) {
+            firstPlayer.isDrop = true;
+            secondPlayer.isDrop = true;
+        } else if (firstPlayer.isDrop && secondPlayer.isDrop) {
             playerDropDice(firstPlayer, combinationInfo1);
-            playerDropDice(AIPlayer, combinationInfo2);
-            defineWinner(firstPlayer, AIPlayer);
-            AIPlayer.resetValues();
+            playerDropDice(secondPlayer, combinationInfo2);
+            defineWinner(firstPlayer, secondPlayer);
+            secondPlayer.resetValues();
             firstPlayer.resetValues();
             showNewGameDialog();
-            isFirstPlayerDrop = false;
-            isSecondPlayerDrop = false;
+            firstPlayer.isDrop = false;
+            secondPlayer.isDrop = false;
         }
     }
 
     public void gamePVP() {
-        if ((!isFirstPlayerDrop && !isSecondPlayerDrop) || (isFirstPlayerDrop && isSecondPlayerDrop)) {
+        if ((!firstPlayer.isDrop && !secondPlayer.isDrop) || (firstPlayer.isDrop && secondPlayer.isDrop)) {
             playerDropDice(firstPlayer, combinationInfo1);
             firstPlayer.resetValues();
-            isFirstPlayerDrop = !isFirstPlayerDrop;
+            firstPlayer.isDrop = !firstPlayer.isDrop;
             isFirstPlayerTurn = !isFirstPlayerTurn;
             dropFirstPlayerDice.setEnabled(false);
             dropSecondPlayerDice.setEnabled(true);
@@ -106,13 +103,13 @@ public class GameActivity extends Activity {
         } else {
             playerDropDice(secondPlayer, combinationInfo2);
             secondPlayer.resetValues();
-            isSecondPlayerDrop = !isSecondPlayerDrop;
+            secondPlayer.isDrop = !secondPlayer.isDrop;
             isFirstPlayerTurn = !isFirstPlayerTurn;
             dropFirstPlayerDice.setEnabled(true);
             dropSecondPlayerDice.setEnabled(false);
             disableDices();
         }
-        if (!isFirstPlayerDrop && !isSecondPlayerDrop) {
+        if (!firstPlayer.isDrop && !secondPlayer.isDrop) {
             defineWinner(firstPlayer, secondPlayer);
             showNewGameDialog();
         }
