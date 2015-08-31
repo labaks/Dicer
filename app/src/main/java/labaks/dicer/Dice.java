@@ -10,4 +10,8 @@ public class Dice {
     boolean switchIsDiceLeft() {
         return isLeft = !isLeft;
     }
+
+    boolean resetDiceLeft() {
+        return isLeft = false;
+    }
 }

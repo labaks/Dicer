@@ -45,6 +45,7 @@ public class Player {
     public void dropAllowedDices() {
         for (int i = 0; i < numberOfDices; i++) {
             if (dices[i].isLeft) {
+                dices[i].resetDiceLeft();
                 continue;
             }
             dices[i].value = generateDiceValue();
