@@ -41,4 +41,6 @@
     <string name="ok">OK</string>
     <string name="bank">Bank:</string>
     <string name="money_count">Count of money:</string>
+    <string name="blind">Blind</string>
+    <string name="set_blind">Set blind</string>
 </resources>

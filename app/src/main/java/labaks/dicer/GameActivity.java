@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -26,7 +28,7 @@ public class GameActivity extends Activity {
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
     public String game_mode, pvc, pvp;
-    public int diceWidth, bank;
+    public int diceWidth, bank, blind;
     public boolean isFirstPlayerTurn = true;
 
     Player firstPlayer;
@@ -219,7 +221,6 @@ public class GameActivity extends Activity {
     }
 
     public void blinds() {
-        int blind = 2;
         firstPlayer.money -= blind;
         secondPlayer.money -= blind;
         bank = 2 * blind;
@@ -233,6 +234,38 @@ public class GameActivity extends Activity {
         builder.setTitle(getString(R.string.new_game))
                 .setMessage(winner.getText() + "\n" + getString(R.string.new_game_q))
                 .setCancelable(false)
+                .setNegativeButton(getString(R.string.no),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                                dialogInterface.cancel();
+                            }
+                        })
+                .setPositiveButton(getString(R.string.yes),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                blindDialog();
+                                dialogInterface.cancel();
+                            }
+                        });
+        AlertDialog newGameDialog = builder.create();
+        newGameDialog.show();
+    }
+
+    public void blindDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
+        final EditText setBlindEdit = new EditText(GameActivity.this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        setBlindEdit.setLayoutParams(params);
+
+        builder.setTitle(getString(R.string.blind))
+                .setCancelable(false)
+                .setMessage(getString(R.string.set_blind))
+                .setView(setBlindEdit)
                 .setNegativeButton(getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -242,12 +275,13 @@ public class GameActivity extends Activity {
                                 winner.setText("");
                                 firstPlayerTable.setVisibility(View.GONE);
                                 secondPlayerTable.setVisibility(View.GONE);
+                                blind = Integer.parseInt(setBlindEdit.getText().toString());
                                 blinds();
                                 dialogInterface.cancel();
                             }
                         });
-        AlertDialog newGameDialog = builder.create();
-        newGameDialog.show();
+        AlertDialog blindDialog = builder.create();
+        blindDialog.show();
     }
 
     public void printInfo(Player player, TextView combinationInfo) {
