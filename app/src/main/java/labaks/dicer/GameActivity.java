@@ -12,9 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameActivity extends Activity {
 
@@ -30,6 +31,7 @@ public class GameActivity extends Activity {
     public String game_mode, pvc, pvp;
     public int diceWidth, bank, blind;
     public boolean isFirstPlayerTurn = true;
+    RelativeLayout blindDialogView;
 
     Player firstPlayer;
     Player secondPlayer;
@@ -256,31 +258,70 @@ public class GameActivity extends Activity {
 
     public void blindDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
-        final EditText setBlindEdit = new EditText(GameActivity.this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        setBlindEdit.setLayoutParams(params);
+        blindDialogView = (RelativeLayout) getLayoutInflater().inflate(R.layout.blind_dialog, null);
+        Button blindOkBtn = (Button) blindDialogView.findViewById(R.id.blindOkBtn);
+        Button blindPreviousBtn = (Button) blindDialogView.findViewById(R.id.blindPreviousBtn);
+        Button blind5Btn = (Button) blindDialogView.findViewById(R.id.blind5Btn);
+        Button blind10Btn = (Button) blindDialogView.findViewById(R.id.blind10Btn);
+        final Toast enterBlindQ = Toast.makeText(getApplicationContext(), getString(R.string.please_enter_blind), Toast.LENGTH_SHORT);
 
         builder.setTitle(getString(R.string.blind))
                 .setCancelable(false)
                 .setMessage(getString(R.string.set_blind))
-                .setView(setBlindEdit)
-                .setNegativeButton(getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                firstPlayerCombInfo.setText("");
-                                secondPlayerCombInfo.setText("");
-                                winner.setText("");
-                                firstPlayerTable.setVisibility(View.GONE);
-                                secondPlayerTable.setVisibility(View.GONE);
-                                blind = Integer.parseInt(setBlindEdit.getText().toString());
-                                blinds();
-                                dialogInterface.cancel();
-                            }
-                        });
-        AlertDialog blindDialog = builder.create();
+                .setView(blindDialogView);
+
+        final AlertDialog blindDialog = builder.create();
+
+        blindOkBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onStartNewGame();
+                EditText setBlindEdit = (EditText) blindDialogView.findViewById(R.id.setBlindEdit);
+                String currentBlindString = setBlindEdit.getText().toString();
+                if (!currentBlindString.equals("")) {
+                    int currentBlind = Integer.parseInt(currentBlindString);
+                    if (currentBlind <= 0) {
+                        enterBlindQ.show();
+                    } else {
+                        blind = currentBlind;
+                        blinds();
+                        blindDialog.dismiss();
+                    }
+                } else {
+                    enterBlindQ.show();
+                }
+            }
+        });
+
+        blindPreviousBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onStartNewGame();
+                blinds();
+                blindDialog.dismiss();
+            }
+        });
+
+        blind5Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onStartNewGame();
+                blind = 5;
+                blinds();
+                blindDialog.dismiss();
+            }
+        });
+
+        blind10Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onStartNewGame();
+                blind = 10;
+                blinds();
+                blindDialog.dismiss();
+            }
+        });
+        setPreviousBlind();
         blindDialog.show();
     }
 
@@ -298,6 +339,26 @@ public class GameActivity extends Activity {
 
     public void printPlayerMoney(Player player, TextView playerMoney) {
         playerMoney.setText(getString(R.string.money_count) + " " + player.money);
+    }
+
+    private void onStartNewGame() {
+        firstPlayerCombInfo.setText("");
+        secondPlayerCombInfo.setText("");
+        winner.setText("");
+        firstPlayerTable.setVisibility(View.GONE);
+        secondPlayerTable.setVisibility(View.GONE);
+    }
+
+    private void setPreviousBlind() {
+        Button blindPreviousBtn = (Button) blindDialogView.findViewById(R.id.blindPreviousBtn);
+        if (blind == 5 || blind == 10) {
+            blindPreviousBtn.setVisibility(View.GONE);
+        } else if (blind != 0) {
+            blindPreviousBtn.setVisibility(View.VISIBLE);
+            blindPreviousBtn.setText(Integer.toString(blind));
+        } else {
+            blindPreviousBtn.setVisibility(View.GONE);
+        }
     }
 
     public void outputResult(Player player, TextView combinationInfo) {
