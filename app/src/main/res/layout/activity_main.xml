@@ -9,31 +9,31 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/onePlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/player_vs_computer"
-        android:id="@+id/onePlayer"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:onClick="toPlayerVsComp" />
+        android:onClick="toPlayerVsComp"
+        android:text="@string/player_vs_computer" />
 
     <Button
+        android:id="@+id/twoPlayers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/player_vs_player"
-        android:id="@+id/twoPlayers"
-        android:layout_below="@+id/onePlayer"
         android:layout_alignLeft="@+id/onePlayer"
         android:layout_alignStart="@+id/onePlayer"
-        android:onClick="toPlayerVsPlayer"/>
+        android:layout_below="@+id/onePlayer"
+        android:onClick="toPlayerVsPlayer"
+        android:text="@string/player_vs_player" />
 
     <Button
+        android:id="@+id/exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/exit"
-        android:id="@+id/exit"
-        android:layout_below="@+id/twoPlayers"
         android:layout_alignLeft="@+id/twoPlayers"
         android:layout_alignStart="@+id/twoPlayers"
-        android:onClick="onExit" />
+        android:layout_below="@+id/twoPlayers"
+        android:onClick="onExit"
+        android:text="@string/exit" />
 </RelativeLayout>

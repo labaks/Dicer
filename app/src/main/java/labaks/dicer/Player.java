@@ -1,5 +1,7 @@
 package labaks.dicer;
 
+import android.widget.Button;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 public class Player {
@@ -34,8 +36,11 @@ public class Player {
     public int[] droppedValuesCount;
 
     int money = 100;
+    int bet = 0;
 
     TextView moneyInfo, combInfo;
+    Button dropDicesBtn, raiseBtn, callBtn, foldBtn;
+    TableLayout dicesTable;
 
     public Player(int diceSides, int numberOfDices) {
         this.diceSides = diceSides;

@@ -50,4 +50,5 @@
     <string name="cancel">Отмена</string>
     <string name="call">Поддержать</string>
     <string name="please_enter_bet">Введите, пожалуйста, вашу ставку (Ставка должна быть больше нуля)</string>
+    <string name="check">Оставить</string>
 </resources>

@@ -24,13 +24,12 @@ public class GameActivity extends Activity {
     public final int FIRST_PLAYER_SHIFT = 0;
     public final int SECOND_PLAYER_SHIFT = 5;
     private TextView winner, bankInfo;
-    private Button dropSecondPlayerDice, dropFirstPlayerDice;
-    private TableLayout firstPlayerTable, secondPlayerTable;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
     public String game_mode, pvc, pvp;
     public int diceWidth, bank, blind;
     public boolean isFirstPlayerTurn = true;
+    public boolean betTime = false;
     RelativeLayout blindDialogView, raiseDialogView;
 
     Player firstPlayer;
@@ -49,21 +48,42 @@ public class GameActivity extends Activity {
         initGame();
     }
 
+    public Player initPlayer(Player player, int combId, int moneyId, int dropDiceBtnId, int tableId, int raiseBtnId, int callBtnId, int foldBtnId) {
+        player.combInfo = (TextView) findViewById(combId);
+        player.moneyInfo = (TextView) findViewById(moneyId);
+        player.dropDicesBtn = (Button) findViewById(dropDiceBtnId);
+        player.dicesTable = (TableLayout) findViewById(tableId);
+        player.raiseBtn = (Button) findViewById(raiseBtnId);
+        player.callBtn = (Button) findViewById(callBtnId);
+        player.foldBtn = (Button) findViewById(foldBtnId);
+        return player;
+    }
+
     public void initGame() {
         firstPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+        initPlayer(firstPlayer,
+                R.id.firstPlayerCombination,
+                R.id.firstPlayerMoney,
+                R.id.dropFirstPlayerDice,
+                R.id.firstTable,
+                R.id.firstPlayerRaise,
+                R.id.firstPlayerCall,
+                R.id.firstPlayerFold);
         initDicesImage(croppedDiceImage, diceWidth, firstPlayer, FIRST_PLAYER_SHIFT);
+
         secondPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
+        initPlayer(secondPlayer,
+                R.id.secondPlayerCombination,
+                R.id.secondPlayerMoney,
+                R.id.dropSecondPlayerDice,
+                R.id.secondTable,
+                R.id.secondPlayerRaise,
+                R.id.secondPlayerCall,
+                R.id.secondPlayerFold);
         initDicesImage(croppedDiceImage, diceWidth, secondPlayer, SECOND_PLAYER_SHIFT);
-        firstPlayer.combInfo = (TextView) findViewById(R.id.firstPlayerCombination);
-        secondPlayer.combInfo = (TextView) findViewById(R.id.secondPlayerCombination);
-        firstPlayer.moneyInfo = (TextView)findViewById(R.id.firstPlayerMoney);
-        secondPlayer.moneyInfo = (TextView) findViewById(R.id.secondPlayerMoney);
+
         winner = (TextView) findViewById(R.id.winner);
         bankInfo = (TextView) findViewById(R.id.bank);
-        dropFirstPlayerDice = (Button) findViewById(R.id.dropFirstPlayerDice);
-        dropSecondPlayerDice = (Button) findViewById(R.id.dropSecondPlayerDice);
-        firstPlayerTable = (TableLayout) findViewById(R.id.firstTable);
-        secondPlayerTable = (TableLayout) findViewById(R.id.secondTable);
 
         printPlayerMoney(firstPlayer);
         printPlayerMoney(secondPlayer);
@@ -73,11 +93,11 @@ public class GameActivity extends Activity {
 
         switch (game_mode) {
             case MainActivity.PLAYER_VS_AI:
-                dropSecondPlayerDice.setVisibility(View.GONE);
-                dropFirstPlayerDice.setText(getString(R.string.drop_the_dice));
+                secondPlayer.dropDicesBtn.setVisibility(View.GONE);
+                firstPlayer.dropDicesBtn.setText(getString(R.string.drop_the_dice));
                 break;
             case MainActivity.PLAYER_VS_PLAYER:
-                dropSecondPlayerDice.setVisibility(View.VISIBLE);
+                secondPlayer.dropDicesBtn.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -103,27 +123,39 @@ public class GameActivity extends Activity {
     }
 
     public void gamePVP() {
-        if ((!firstPlayer.isDrop && !secondPlayer.isDrop) || (firstPlayer.isDrop && secondPlayer.isDrop)) {
+        if ((!firstPlayer.isDrop && !secondPlayer.isDrop) || (firstPlayer.isDrop && secondPlayer.isDrop && !betTime)) {
             playerDropDice(firstPlayer);
             firstPlayer.resetValues();
             firstPlayer.isDrop = !firstPlayer.isDrop;
             isFirstPlayerTurn = !isFirstPlayerTurn;
-            dropFirstPlayerDice.setEnabled(false);
-            dropSecondPlayerDice.setEnabled(true);
+            firstPlayer.dropDicesBtn.setEnabled(false);
+            secondPlayer.dropDicesBtn.setEnabled(true);
             disableDices();
         } else {
             playerDropDice(secondPlayer);
             secondPlayer.resetValues();
             secondPlayer.isDrop = !secondPlayer.isDrop;
             isFirstPlayerTurn = !isFirstPlayerTurn;
-            dropFirstPlayerDice.setEnabled(true);
-            dropSecondPlayerDice.setEnabled(false);
+            firstPlayer.dropDicesBtn.setEnabled(true);
+            secondPlayer.dropDicesBtn.setEnabled(false);
             disableDices();
         }
         if (!firstPlayer.isDrop && !secondPlayer.isDrop) {
             defineWinner();
             showNewGameDialog();
         }
+        if (firstPlayer.isDrop && secondPlayer.isDrop) {
+            switchEnableOperationsBtns(firstPlayer, true);
+            firstPlayer.dropDicesBtn.setEnabled(false);
+            betTime = true;
+            disableDices();
+        }
+    }
+
+    public void switchEnableOperationsBtns(Player player, boolean state) {
+        player.raiseBtn.setEnabled(state);
+        player.callBtn.setEnabled(state);
+        player.foldBtn.setEnabled(state);
     }
 
     public void playerDropDice(Player player) {
@@ -153,8 +185,10 @@ public class GameActivity extends Activity {
     }
 
     public void onDiceLeft(View view) {
-        if (isFirstPlayerTurn) {
-            firstPlayer.dices = onDiceLeftImpl(view.getId(), firstPlayer);
+        if (!betTime) {
+            if (isFirstPlayerTurn) {
+                firstPlayer.dices = onDiceLeftImpl(view.getId(), firstPlayer);
+            }
         }
     }
 
@@ -192,21 +226,22 @@ public class GameActivity extends Activity {
         } else {
             winner.setText(getString(R.string.dead_heat));
         }
+        firstPlayer.bet = secondPlayer.bet = 0;
     }
 
     public void dropFirstPlayerDice(View view) {
         if (game_mode.equals(pvc)) {
-            firstPlayerTable.setVisibility(View.VISIBLE);
-            secondPlayerTable.setVisibility(View.VISIBLE);
+            firstPlayer.dicesTable.setVisibility(View.VISIBLE);
+            secondPlayer.dicesTable.setVisibility(View.VISIBLE);
             gamePVC();
         } else if (game_mode.equals(pvp)) {
-            firstPlayerTable.setVisibility(View.VISIBLE);
+            firstPlayer.dicesTable.setVisibility(View.VISIBLE);
             gamePVP();
         }
     }
 
     public void dropSecondPlayerDice(View view) {
-        secondPlayerTable.setVisibility(View.VISIBLE);
+        secondPlayer.dicesTable.setVisibility(View.VISIBLE);
         gamePVP();
     }
 
@@ -218,6 +253,10 @@ public class GameActivity extends Activity {
             } else {
                 firstPlayer.dices[i].diceButton.setBackgroundColor(Color.GRAY);
                 secondPlayer.dices[i].diceButton.setBackgroundColor(Color.WHITE);
+            }
+            if (betTime) {
+                firstPlayer.dices[i].diceButton.setBackgroundColor(Color.GRAY);
+                secondPlayer.dices[i].diceButton.setBackgroundColor(Color.GRAY);
             }
         }
     }
@@ -345,8 +384,8 @@ public class GameActivity extends Activity {
         firstPlayer.combInfo.setText("");
         secondPlayer.combInfo.setText("");
         winner.setText("");
-        firstPlayerTable.setVisibility(View.GONE);
-        secondPlayerTable.setVisibility(View.GONE);
+        firstPlayer.dicesTable.setVisibility(View.GONE);
+        secondPlayer.dicesTable.setVisibility(View.GONE);
     }
 
     private void setPreviousBlind() {
@@ -386,11 +425,30 @@ public class GameActivity extends Activity {
                         enterBetQ.show();
                     } else {
                         raise(player, bet);
+                        if (firstPlayer.bet > secondPlayer.bet) {
+                            switchEnableOperationsBtns(firstPlayer, false);
+                            switchEnableOperationsBtns(secondPlayer, true);
+                            firstPlayer.dropDicesBtn.setEnabled(false);
+                            secondPlayer.callBtn.setText(getString(R.string.call));
+                        } else if (firstPlayer.bet < secondPlayer.bet) {
+                            switchEnableOperationsBtns(firstPlayer, true);
+                            switchEnableOperationsBtns(secondPlayer, false);
+                            firstPlayer.callBtn.setText(getString(R.string.call));
+                            secondPlayer.dropDicesBtn.setEnabled(false);
+                        } else {
+                            firstPlayer.callBtn.setText(getString(R.string.check));
+                            secondPlayer.callBtn.setText(getString(R.string.check));
+                            firstPlayer.dropDicesBtn.setEnabled(true);
+                            switchEnableOperationsBtns(secondPlayer, false);
+                            betTime = false;
+                            disableDices();
+                        }
                         raiseDialog.dismiss();
                     }
                 } else {
                     enterBetQ.show();
                 }
+
 
             }
         });
@@ -409,9 +467,7 @@ public class GameActivity extends Activity {
                 raiseDialog.dismiss();
             }
         });
-
         raiseDialog.show();
-
     }
 
     public void allIn(Player player) {
@@ -422,6 +478,7 @@ public class GameActivity extends Activity {
     }
 
     public void raise(Player player, int bet) {
+        player.bet += bet;
         bank += bet;
         player.money -= bet;
         printPlayerMoney(player);
@@ -431,6 +488,7 @@ public class GameActivity extends Activity {
     public void onFirstPlayerRaise(View view) {
         raiseDialog(firstPlayer);
     }
+
     public void onSecondPlayerRaise(View view) {
         raiseDialog(secondPlayer);
     }
