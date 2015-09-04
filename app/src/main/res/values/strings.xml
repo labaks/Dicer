@@ -46,4 +46,11 @@
     <string name="blind_5" translatable="false">5</string>
     <string name="blind_10" translatable="false">10</string>
     <string name="please_enter_blind">Please enter the blind (Blind must be grater than 0)</string>
+    <string name="raise">Raise</string>
+    <string name="call">Call</string>
+    <string name="fold">Fold</string>
+    <string name="raise_the_bet">Raise the bet</string>
+    <string name="all_in">All in</string>
+    <string name="cancel">Cancel</string>
+    <string name="please_enter_bet">Please enter the bet (Bet must be greater than 0)</string>
 </resources>

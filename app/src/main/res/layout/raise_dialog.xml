@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/raiseDialogMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/raise_the_bet" />
+
+
+    <Button
+        android:id="@+id/raiseBtnAllIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/all_in"
+        android:layout_below="@+id/raiseDialogMessage"/>
+
+    <EditText
+        android:id="@+id/raiseBetEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/raiseBtnAllIn"
+        android:inputType="number"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/raiseGroupBtn"
+        android:layout_below="@id/raiseBetEdit">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/raiseBtnCancel"
+            android:text="@string/cancel"/>
+
+        <Button
+            android:id="@+id/raiseBtnOk"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="@string/ok"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

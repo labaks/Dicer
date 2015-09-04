@@ -43,4 +43,11 @@
     <string name="blind">Блайнд</string>
     <string name="set_blind">Установить блайнд</string>
     <string name="please_enter_blind">Укажите, пожалуйста, блайнд (Блайнд должен быть больше нуля)</string>
+    <string name="raise">Повысить</string>
+    <string name="fold">Сбросить</string>
+    <string name="raise_the_bet">Повысить ставку</string>
+    <string name="all_in">Ва-банк</string>
+    <string name="cancel">Отмена</string>
+    <string name="call">Поддержать</string>
+    <string name="please_enter_bet">Введите, пожалуйста, вашу ставку (Ставка должна быть больше нуля)</string>
 </resources>

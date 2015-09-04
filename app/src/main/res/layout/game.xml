@@ -87,13 +87,49 @@
 
     </TableLayout>
 
+    <LinearLayout
+        android:id="@+id/operationButtonsSecondPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/secondTable">
+
+        <Button
+            android:id="@+id/secondPlayerRaise"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:enabled="false"
+            android:onClick="onSecondPlayerRaise"
+            android:text="@string/raise"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/secondPlayerCall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:enabled="false"
+            android:text="@string/call"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/secondPlayerFold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:enabled="false"
+            android:text="@string/fold"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/secondPlayerCombination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/secondTable"
         android:layout_alignStart="@+id/secondTable"
-        android:layout_below="@+id/secondTable"
+        android:layout_below="@+id/operationButtonsSecondPlayer"
         android:text="" />
 
     <TextView
@@ -120,8 +156,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_below="@+id/bank"
+        android:layout_centerVertical="true"
         android:text="" />
 
     <TextView
@@ -135,8 +171,44 @@
         android:id="@+id/firstPlayerCombination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/firstTable"
+        android:layout_above="@+id/operationButtonsFirstPlayer"
         android:text="" />
+
+    <LinearLayout
+        android:id="@+id/operationButtonsFirstPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/firstTable">
+
+        <Button
+            android:id="@+id/firstPlayerRaise"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:enabled="false"
+            android:onClick="onFirstPlayerRaise"
+            android:text="@string/raise"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/firstPlayerCall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:enabled="false"
+            android:text="@string/call"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/firstPlayerFold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:enabled="false"
+            android:text="@string/fold"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
 
     <TableLayout
         android:id="@+id/firstTable"
