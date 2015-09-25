@@ -54,4 +54,7 @@
     <string name="cancel">Cancel</string>
     <string name="please_enter_bet">Please enter the bet (Bet must be greater than 0)</string>
     <string name="check">Check</string>
+    <string name="first_player_comb">First player:</string>
+    <string name="second_player_comb">Second player:</string>
+    <string name="prize">Prize:</string>
 </resources>

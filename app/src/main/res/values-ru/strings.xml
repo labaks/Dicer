@@ -51,4 +51,7 @@
     <string name="call">Поддержать</string>
     <string name="please_enter_bet">Введите, пожалуйста, вашу ставку (Ставка должна быть больше нуля)</string>
     <string name="check">Оставить</string>
+    <string name="first_player_comb">Первый игрок:</string>
+    <string name="prize">Выигрыш:</string>
+    <string name="second_player_comb">Второй игрок:</string>
 </resources>

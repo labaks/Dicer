@@ -118,6 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
             android:enabled="false"
+            android:onClick="onSecondPlayerFold"
             android:text="@string/fold"
             android:textSize="16sp" />
 
@@ -205,6 +206,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
             android:enabled="false"
+            android:onClick="onFirstPlayerFold"
             android:text="@string/fold"
             android:textSize="16sp" />
 

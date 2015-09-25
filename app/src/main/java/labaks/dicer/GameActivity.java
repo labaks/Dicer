@@ -116,7 +116,6 @@ public class GameActivity extends Activity {
             defineWinner();
             secondPlayer.resetValues();
             firstPlayer.resetValues();
-            showNewGameDialog();
             firstPlayer.isDrop = false;
             secondPlayer.isDrop = false;
         }
@@ -142,7 +141,6 @@ public class GameActivity extends Activity {
         }
         if (!firstPlayer.isDrop && !secondPlayer.isDrop) {
             defineWinner();
-            showNewGameDialog();
         }
         if (firstPlayer.isDrop && secondPlayer.isDrop) {
             switchEnableOperationsBtns(firstPlayer, true);
@@ -227,6 +225,8 @@ public class GameActivity extends Activity {
             winner.setText(getString(R.string.dead_heat));
         }
         firstPlayer.bet = secondPlayer.bet = 0;
+        betTime = false;
+        onStartNewGame();
     }
 
     public void dropFirstPlayerDice(View view) {
@@ -272,15 +272,27 @@ public class GameActivity extends Activity {
 
     public void showNewGameDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
+        StringBuilder stringBuilder = new StringBuilder();
+        String space = " ";
+        String newline = "\n";
+        if (bank == 0) {
+            stringBuilder.append(getString(R.string.new_game_q));
+        } else {
+            stringBuilder.append(getString(R.string.first_player_comb)).append(space).append(firstPlayer.combInfo.getText()).append(newline)
+                    .append(getString(R.string.second_player_comb)).append(space).append(secondPlayer.combInfo.getText()).append(newline)
+                    .append(winner.getText()).append(newline)
+                    .append(getString(R.string.prize)).append(space).append(bank).append(newline)
+                    .append(getString(R.string.new_game_q));
+        }
         builder.setTitle(getString(R.string.new_game))
-                .setMessage(winner.getText() + "\n" + getString(R.string.new_game_q))
+                .setMessage(stringBuilder.toString())
                 .setCancelable(false)
                 .setNegativeButton(getString(R.string.no),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 finish();
-                                dialogInterface.cancel();
+                                dialogInterface.dismiss();
                             }
                         })
                 .setPositiveButton(getString(R.string.yes),
@@ -288,7 +300,7 @@ public class GameActivity extends Activity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 blindDialog();
-                                dialogInterface.cancel();
+                                dialogInterface.dismiss();
                             }
                         });
         AlertDialog newGameDialog = builder.create();
@@ -314,7 +326,6 @@ public class GameActivity extends Activity {
         blindOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onStartNewGame();
                 EditText setBlindEdit = (EditText) blindDialogView.findViewById(R.id.setBlindEdit);
                 String currentBlindString = setBlindEdit.getText().toString();
                 if (!currentBlindString.equals("")) {
@@ -335,7 +346,6 @@ public class GameActivity extends Activity {
         blindPreviousBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onStartNewGame();
                 blinds();
                 blindDialog.dismiss();
             }
@@ -344,7 +354,6 @@ public class GameActivity extends Activity {
         blind5Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onStartNewGame();
                 blind = 5;
                 blinds();
                 blindDialog.dismiss();
@@ -354,7 +363,6 @@ public class GameActivity extends Activity {
         blind10Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onStartNewGame();
                 blind = 10;
                 blinds();
                 blindDialog.dismiss();
@@ -381,11 +389,18 @@ public class GameActivity extends Activity {
     }
 
     private void onStartNewGame() {
+        showNewGameDialog();
         firstPlayer.combInfo.setText("");
         secondPlayer.combInfo.setText("");
         winner.setText("");
         firstPlayer.dicesTable.setVisibility(View.GONE);
         secondPlayer.dicesTable.setVisibility(View.GONE);
+        firstPlayer.dropDicesBtn.setVisibility(View.VISIBLE);
+        firstPlayer.dropDicesBtn.setEnabled(true);
+        switchEnableOperationsBtns(firstPlayer, false);
+        switchEnableOperationsBtns(secondPlayer, false);
+        firstPlayer.isDrop = false;
+        secondPlayer.isDrop = false;
     }
 
     private void setPreviousBlind() {
@@ -485,12 +500,25 @@ public class GameActivity extends Activity {
         printBankInfo();
     }
 
+    public void fold(Player player) {
+        player.doubleResult = -1;
+        defineWinner();
+    }
+
     public void onFirstPlayerRaise(View view) {
         raiseDialog(firstPlayer);
     }
 
     public void onSecondPlayerRaise(View view) {
         raiseDialog(secondPlayer);
+    }
+
+    public void onFirstPlayerFold(View view) {
+        fold(firstPlayer);
+    }
+
+    public void onSecondPlayerFold(View view) {
+        fold(secondPlayer);
     }
 
 
