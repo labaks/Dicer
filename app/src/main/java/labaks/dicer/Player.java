@@ -38,7 +38,7 @@ public class Player {
     int money = 100;
     int bet = 0;
 
-    TextView moneyInfo, combInfo;
+    TextView moneyInfo, combInfo, playerBet;
     Button dropDicesBtn, raiseBtn, callBtn, foldBtn;
     TableLayout dicesTable;
 

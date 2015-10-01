@@ -143,6 +143,16 @@
         android:text="" />
 
     <TextView
+        android:id="@+id/secondPlayerBet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/bank"
+        android:layout_centerVertical="true"
+        android:text="" />
+
+    <TextView
         android:id="@+id/bank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -152,7 +162,7 @@
         android:text="" />
 
     <TextView
-        android:id="@+id/winner"
+        android:id="@+id/firstPlayerBet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

@@ -54,4 +54,5 @@
     <string name="first_player_comb">Первый игрок:</string>
     <string name="prize">Выигрыш:</string>
     <string name="second_player_comb">Второй игрок:</string>
+    <string name="bet">Ставка:</string>
 </resources>

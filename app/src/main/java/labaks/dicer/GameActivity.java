@@ -23,10 +23,10 @@ public class GameActivity extends Activity {
     private final int DICE_SIDES = 6;
     public final int FIRST_PLAYER_SHIFT = 0;
     public final int SECOND_PLAYER_SHIFT = 5;
-    private TextView winner, bankInfo;
+    private TextView bankInfo;
     private Bitmap[] croppedDiceImage = new Bitmap[DICE_SIDES];
     private final static DisplayMetrics metrics = new DisplayMetrics();
-    public String game_mode, pvc, pvp;
+    public String game_mode, pvc, pvp, winner;
     public int diceWidth, bank, blind;
     public boolean isFirstPlayerTurn = true;
     public boolean betTime = false;
@@ -48,7 +48,7 @@ public class GameActivity extends Activity {
         initGame();
     }
 
-    public Player initPlayer(Player player, int combId, int moneyId, int dropDiceBtnId, int tableId, int raiseBtnId, int callBtnId, int foldBtnId) {
+    public Player initPlayer(Player player, int combId, int moneyId, int dropDiceBtnId, int tableId, int raiseBtnId, int callBtnId, int foldBtnId, int betId) {
         player.combInfo = (TextView) findViewById(combId);
         player.moneyInfo = (TextView) findViewById(moneyId);
         player.dropDicesBtn = (Button) findViewById(dropDiceBtnId);
@@ -56,6 +56,7 @@ public class GameActivity extends Activity {
         player.raiseBtn = (Button) findViewById(raiseBtnId);
         player.callBtn = (Button) findViewById(callBtnId);
         player.foldBtn = (Button) findViewById(foldBtnId);
+        player.playerBet = (TextView) findViewById(betId);
         return player;
     }
 
@@ -68,7 +69,8 @@ public class GameActivity extends Activity {
                 R.id.firstTable,
                 R.id.firstPlayerRaise,
                 R.id.firstPlayerCall,
-                R.id.firstPlayerFold);
+                R.id.firstPlayerFold,
+                R.id.firstPlayerBet);
         initDicesImage(croppedDiceImage, diceWidth, firstPlayer, FIRST_PLAYER_SHIFT);
 
         secondPlayer = new Player(DICE_SIDES, NUMBER_OF_DICES);
@@ -79,10 +81,10 @@ public class GameActivity extends Activity {
                 R.id.secondTable,
                 R.id.secondPlayerRaise,
                 R.id.secondPlayerCall,
-                R.id.secondPlayerFold);
+                R.id.secondPlayerFold,
+                R.id.secondPlayerBet);
         initDicesImage(croppedDiceImage, diceWidth, secondPlayer, SECOND_PLAYER_SHIFT);
 
-        winner = (TextView) findViewById(R.id.winner);
         bankInfo = (TextView) findViewById(R.id.bank);
 
         printPlayerMoney(firstPlayer);
@@ -216,13 +218,13 @@ public class GameActivity extends Activity {
 
     public void defineWinner() {
         if (firstPlayer.doubleResult > secondPlayer.doubleResult) {
-            winner.setText(getString(R.string.first_player_win));
+            winner = getString(R.string.first_player_win);
             firstPlayer.money += bank;
         } else if (firstPlayer.doubleResult < secondPlayer.doubleResult) {
-            winner.setText(getString(R.string.second_player_win));
+            winner = getString(R.string.second_player_win);
             secondPlayer.money += bank;
         } else {
-            winner.setText(getString(R.string.dead_heat));
+            winner = getString(R.string.dead_heat);
         }
         firstPlayer.bet = secondPlayer.bet = 0;
         betTime = false;
@@ -280,7 +282,7 @@ public class GameActivity extends Activity {
         } else {
             stringBuilder.append(getString(R.string.first_player_comb)).append(space).append(firstPlayer.combInfo.getText()).append(newline)
                     .append(getString(R.string.second_player_comb)).append(space).append(secondPlayer.combInfo.getText()).append(newline)
-                    .append(winner.getText()).append(newline)
+                    .append(winner).append(newline)
                     .append(getString(R.string.prize)).append(space).append(bank).append(newline)
                     .append(getString(R.string.new_game_q));
         }
@@ -388,11 +390,17 @@ public class GameActivity extends Activity {
         player.moneyInfo.setText(getString(R.string.money_count) + " " + player.money);
     }
 
+    public void printPlayerBet(Player player) {
+        player.playerBet.setText(getString(R.string.bet) + " " + player.bet);
+    }
+
     private void onStartNewGame() {
         showNewGameDialog();
         firstPlayer.combInfo.setText("");
         secondPlayer.combInfo.setText("");
-        winner.setText("");
+        firstPlayer.playerBet.setText("");
+        secondPlayer.playerBet.setText("");
+        winner = "";
         firstPlayer.dicesTable.setVisibility(View.GONE);
         secondPlayer.dicesTable.setVisibility(View.GONE);
         firstPlayer.dropDicesBtn.setVisibility(View.VISIBLE);
@@ -440,39 +448,23 @@ public class GameActivity extends Activity {
                         enterBetQ.show();
                     } else {
                         raise(player, bet);
-                        if (firstPlayer.bet > secondPlayer.bet) {
-                            switchEnableOperationsBtns(firstPlayer, false);
-                            switchEnableOperationsBtns(secondPlayer, true);
-                            firstPlayer.dropDicesBtn.setEnabled(false);
-                            secondPlayer.callBtn.setText(getString(R.string.call));
-                        } else if (firstPlayer.bet < secondPlayer.bet) {
-                            switchEnableOperationsBtns(firstPlayer, true);
-                            switchEnableOperationsBtns(secondPlayer, false);
-                            firstPlayer.callBtn.setText(getString(R.string.call));
-                            secondPlayer.dropDicesBtn.setEnabled(false);
-                        } else {
-                            firstPlayer.callBtn.setText(getString(R.string.check));
-                            secondPlayer.callBtn.setText(getString(R.string.check));
-                            firstPlayer.dropDicesBtn.setEnabled(true);
-                            switchEnableOperationsBtns(secondPlayer, false);
-                            betTime = false;
-                            disableDices();
-                        }
+                        checkGreatestBet();
                         raiseDialog.dismiss();
                     }
                 } else {
                     enterBetQ.show();
                 }
-
-
+                printPlayerBet(player);
             }
         });
 
         raiseBtnAllIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                allIn(player);
+                raise(player, player.money);
+                checkGreatestBet();
                 raiseDialog.dismiss();
+                printPlayerBet(player);
             }
         });
 
@@ -485,11 +477,25 @@ public class GameActivity extends Activity {
         raiseDialog.show();
     }
 
-    public void allIn(Player player) {
-        bank += player.money;
-        player.money = 0;
-        printPlayerMoney(player);
-        printBankInfo();
+    public void checkGreatestBet() {
+        if (firstPlayer.bet > secondPlayer.bet) {
+            switchEnableOperationsBtns(firstPlayer, false);
+            switchEnableOperationsBtns(secondPlayer, true);
+            firstPlayer.dropDicesBtn.setEnabled(false);
+            secondPlayer.callBtn.setText(getString(R.string.call));
+        } else if (firstPlayer.bet < secondPlayer.bet) {
+            switchEnableOperationsBtns(firstPlayer, true);
+            switchEnableOperationsBtns(secondPlayer, false);
+            firstPlayer.callBtn.setText(getString(R.string.call));
+            secondPlayer.dropDicesBtn.setEnabled(false);
+        } else {
+            firstPlayer.callBtn.setText(getString(R.string.check));
+            secondPlayer.callBtn.setText(getString(R.string.check));
+            firstPlayer.dropDicesBtn.setEnabled(true);
+            switchEnableOperationsBtns(secondPlayer, false);
+            betTime = false;
+            disableDices();
+        }
     }
 
     public void raise(Player player, int bet) {
